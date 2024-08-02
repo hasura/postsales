@@ -1,0 +1,5 @@
+Flask==3.0.1
+gunicorn==22.0.0
+python-dotenv==0.17.1
+requests==2.26.0
+Werkzeug==3.0.0                

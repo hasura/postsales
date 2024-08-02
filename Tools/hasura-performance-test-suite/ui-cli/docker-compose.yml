@@ -1,0 +1,53 @@
+version: '3.8'
+
+volumes:
+  prometheus_data: {}
+  grafana_data: {}
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.api
+    image: react-flask-app-api
+    volumes:
+      - ./graphQL:/app/graphQL
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.client
+    image: react-flask-app-client
+    ports:
+      - "3000:80"
+
+  prometheus:
+    image: ${PROM_IMAGE}
+    container_name: hts-prom
+    ports:
+      - ${PROM_PORT}:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+  
+  pushgateway:
+    image: prom/pushgateway:v1.5.1
+    container_name: pushgateway
+    ports:
+      - "9091:9091"
+
+  grafana:
+    image: grafana/grafana:9.5.2
+    container_name: hts-grafana
+    ports:
+      - ${GRAFANA_PORT}:3000
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    

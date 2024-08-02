@@ -1,0 +1,28 @@
+config:
+scenarios:
+  - flow:
+    - get:
+        url: '/pets/f037ed9a'
+        expect:
+          - headerEquals:
+              - 'object-version'
+              - 'v3'
+    - get:
+        url: '/pets/f037ed9a'
+        expect:
+          - matchesRegexp: .+ 
+    - get:
+        url: '/pets/f037ed9a'
+        expect:
+          - headerEquals:
+              - 'object-version'
+              - 'v3'
+    - get:
+        url: '/pets/f037ed9a'
+        capture:
+          - json: '$.species'
+            as: species
+        expect:
+          - equals:
+              - '{{ species }}'
+              - 'dog'

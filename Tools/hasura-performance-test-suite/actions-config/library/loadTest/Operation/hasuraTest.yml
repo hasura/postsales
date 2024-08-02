@@ -1,0 +1,32 @@
+query GetArtist {
+  artist(limit: 10) {
+    artist_id
+    name
+  }
+}
+
+query GetCustomer {
+  customer(limit: 10) {
+    city
+    company
+    country
+    customer_id
+    email
+  }
+}
+
+query GetEmployee {
+  employee(limit: 10) {
+    address
+    birth_date
+    city
+  }
+}
+
+query GetTrack {
+  track(limit: 10) {
+    bytes
+    composer
+    album_id
+  }
+}

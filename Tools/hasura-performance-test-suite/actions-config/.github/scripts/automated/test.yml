@@ -1,0 +1,37 @@
+name: Update Workflow Dispatch Options
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - output.json
+
+jobs:
+  update-workflow:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        persist-credentials: false
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Run update_workflow.py script
+      run: python .github/scripts/update_workflow.py
+
+    - name: Commit changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add .github/workflows/run_hasura_tests_suite.yml
+        git commit -m 'Update run_hasura_tests_suite workflow with dynamic options'
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.COMMIT }}

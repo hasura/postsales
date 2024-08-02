@@ -1,0 +1,18 @@
+query ArtistId {
+  Artist (limit: 10) {
+    ArtistId
+  }
+}
+query ArtistName {
+  Artist (limit: 10) {
+    ArtistId
+    Name
+  }
+}
+query getCustomer {
+  Customer (limit: 10) {
+    City
+    Company
+    Country
+  }
+}
