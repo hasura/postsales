@@ -1,0 +1,52 @@
+config:
+scenarios:
+  - name: Null Scenario
+    flow:
+      - post:
+          url: "/"
+          json:
+            query: | 
+              query testQuery($userid: Int!) {
+                playing_with_neon(where: {id: {_eq: $userid}}) {
+                  name
+                  id
+                }
+              }
+            
+            variables:
+              userid:1
+          expect:
+            - statusCode:200
+  - loop:
+    - post:
+        url: '/'
+        json:
+          query: |
+            mutation MyMutation($name: String!) {
+                insert_playing_with_neon(objects: {name: $name}) {
+                  returning {
+                    id
+                    name
+                  }
+                }
+              }
+          variables:
+            name: '{{ $randomString() }}'
+        capture:
+                - json: '$.data.insert_playing_with_neon.returning[0].id'
+                  as: id
+    count: 100
+
+  - name: Delete data
+    flow:
+      - post:
+          url: '/'
+          json:
+            query: |
+             mutation deleteData($id: Int!) {
+                delete_playing_with_neon(where: {id: {_eq: $id}}) {
+                  affected_rows
+                }
+              }
+            variables:
+              id: '{{ id }}'

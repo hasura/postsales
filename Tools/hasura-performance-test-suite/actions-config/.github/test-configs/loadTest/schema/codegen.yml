@@ -1,0 +1,9 @@
+overwrite: true
+schema: 
+  - ${GRAPHQL_ENDPOINT}:
+      headers:
+        x-hasura-admin-secret: ${HASURA_ADMIN_SECRET}
+generates:
+  schema/schema.graphql:
+    plugins:
+      - schema-ast

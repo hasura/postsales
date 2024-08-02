@@ -1,0 +1,15 @@
+{
+  "name": "test-suite",
+  "version": "1.0.0",
+  "description": "Contriving a system for load and functional testing of GraphQL APIs using the Artillery testing framework. Load testing involves evaluating the performance, scalability, and reliability of a GraphQL API under varying levels of simulated user traffic.",
+  "main": "index.js",
+  "scripts": {
+    "codegen": "graphql-codegen -r dotenv/config --config graphQL/schema/codegen.yml dotenv_config_path=./.env"
+  },
+  "author": "Gourav",
+  "license": "ISC",
+  "dependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "dotenv": "^16.4.5"
+  }
+}

@@ -1,0 +1,48 @@
+config:
+  target:  "{{ $env.GRAPHQL_ENDPOINT }}"
+  defaults:
+      headers:
+        x-hasura-admin-secret: "{{ $env.HASURA_ADMIN_SECRET }}"
+  phases:
+    - duration: "{{ $env.TEST_DURATION }}"   # Duration of the test in seconds 
+      arrivalRate: "{{ $env.STARTING_ARRIVAL_RATE }}"  # Initial arrival rate (users per second)
+      rampTo: "{{ $env.ENDING_ARRIVAL_RATE }}"     # Maximum arrival rate (users per second)
+      maxVusers: "{{ $env.MAXIMUM_VIRTUAL_USER }}"
+  processor: './test-config.js'
+  plugins:
+    metrics-by-endpoint:
+      useOnlyRequestNames: true
+      metricsNamespace: operation
+    
+    publish-metrics:
+      - type: prometheus
+        pushgateway: "{{ $env.PUSHGATEWAY }}"
+        tags:
+          - "testId:{{ $env.TEST_NAME }}"
+          - "type:loadtest"
+        ssl: false
+    expect: 
+      reportFailuresAsErrors: true
+      outputFormat: json
+
+scenarios:
+  - name: 'GraphQL Query load test'
+    flow:
+      - function: 'testCases'
+      - loop:
+          - post:
+              url: '/'
+              name: '{{ $loopElement.name }}'
+              afterResponse: "myBeforeRequestHook"
+              json:
+                query: '{{ $loopElement.query }}'
+                variables: '{{ $loopElement.variables }}'
+              expect:
+               - statusCode: 200
+          - log: '--------------------------------------'
+          - log: 'Sent a request to the {{ $loopElement.operation }}: {{ $loopElement.name }}'
+          - log: '--------------------------------------'
+          - log: 'And variables {{ $loopElement.variables }}'
+        over: cases
+ 
+

@@ -1,0 +1,22 @@
+name: Update Workflow Dispatch Options
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-workflow:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Run update_workflow.py script
+      run: python .github/scripts/update_workflow.py
