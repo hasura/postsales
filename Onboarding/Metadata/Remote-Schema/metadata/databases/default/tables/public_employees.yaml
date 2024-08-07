@@ -1,0 +1,11 @@
+table:
+  name: employees
+  schema: public
+array_relationships:
+  - name: teams
+    using:
+      foreign_key_constraint_on:
+        column: team_manager
+        table:
+          name: teams
+          schema: public

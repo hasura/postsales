@@ -1,0 +1,7 @@
+version: 3
+endpoint: https://ruling-tomcat-27.hasura.app
+admin_secret: e6HyGNodbwAxuR05Z0qtcpyFU1OCpu0Nn9FJw3mNKXgMrXr5bxaW5mby5sHPOibd
+metadata_directory: metadata
+actions:
+  kind: synchronous
+  handler_webhook_baseurl: http://localhost:3000

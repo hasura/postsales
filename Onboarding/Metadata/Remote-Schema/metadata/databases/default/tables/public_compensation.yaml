@@ -1,0 +1,16 @@
+table:
+  name: compensation
+  schema: public
+select_permissions:
+  - role: employee
+    permission:
+      columns:
+        - comp_base
+        - comp_emp
+        - comp_id
+        - comp_variable
+      filter:
+        comp_emp:
+          _eq: X-Hasura-Emp-Id
+      limit: 1
+    comment: ""

@@ -1,0 +1,44 @@
+- name: Proj_And_Inits
+  definition:
+    url: https://major-alpaca-82.hasura.app/v1/graphql
+    timeout_seconds: 60
+    customization: {}
+    headers:
+      - name: x-hasura-admin-secret
+        value: 8zj1zt3EHGKw5HZ1FEN9JOnJE4ubPk6m63eHJwOi3U7Vtw7noA2kuxtSBCHfFNXI
+  comment: ""
+  remote_relationships:
+    - relationships:
+        - definition:
+            to_source:
+              field_mapping:
+                init_owner: emp_id
+              relationship_type: object
+              source: default
+              table:
+                name: employees
+                schema: public
+          name: Initative_Leader
+      type_name: initiatives
+    - relationships:
+        - definition:
+            to_source:
+              field_mapping:
+                prj_team: team_id
+              relationship_type: object
+              source: default
+              table:
+                name: teams
+                schema: public
+          name: Project_Teams
+        - definition:
+            to_source:
+              field_mapping:
+                prj_lead: emp_id
+              relationship_type: object
+              source: default
+              table:
+                name: employees
+                schema: public
+          name: Project_Lead
+      type_name: projects
