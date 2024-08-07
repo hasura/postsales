@@ -1,3 +1,19 @@
 table:
   name: projects
   schema: public
+update_permissions:
+  - role: employee
+    permission:
+      columns: []
+      filter:
+        prj_lead:
+          _eq: X-Hasura-Emp-Id
+      check: null
+    comment: ""
+delete_permissions:
+  - role: employee
+    permission:
+      filter:
+        prj_lead:
+          _eq: X-Hasura-Emp-Id
+    comment: ""
