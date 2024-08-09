@@ -1,6 +1,6 @@
 version: 3
-endpoint: https://major-alpaca-82.hasura.app
-admin_secret: 8zj1zt3EHGKw5HZ1FEN9JOnJE4ubPk6m63eHJwOi3U7Vtw7noA2kuxtSBCHfFNXI
+endpoint: <YOUR_HASURA_ENDPOINT>
+admin_secret: <YOUR_HASURA_SECRET>
 metadata_directory: metadata
 actions:
   kind: synchronous
