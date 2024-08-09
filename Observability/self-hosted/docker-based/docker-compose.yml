@@ -1,6 +1,7 @@
 volumes:
   prometheus_data: {}
   grafana_data: {}
+  loki_data: {}
 
 services:
   prometheus:
@@ -77,6 +78,8 @@ services:
     ports:
       - ${LOKI_PORT}:3100
     command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - ./loki/local-config.yaml:/etc/loki/local-config.yaml
 
   otel-collector:
     container_name: hge-otel-collector
