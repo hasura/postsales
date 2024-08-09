@@ -1,0 +1,13 @@
+- name: allowed-queries
+  definition:
+    queries:
+      - name: MyQuery
+        query: |
+          query MyQuery {
+            compensation {
+              comp_base
+              comp_emp
+              comp_id
+              comp_variable
+            }
+          }

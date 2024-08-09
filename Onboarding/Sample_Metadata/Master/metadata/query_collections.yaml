@@ -1,0 +1,13 @@
+- name: allowed-queries
+  definition:
+    queries:
+      - name: MyQuery
+        query: |
+          query MyQuery {
+            initiatives(limit: 10) {
+              init_description
+              init_id
+              init_name
+              init_owner
+            }
+          }
