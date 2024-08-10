@@ -1,25 +1,25 @@
 batch_limit:
   global: 2
   per_role:
-    employee: 1
+    employee: 2
 depth_limit:
-  global: 3
+  global: 5
   per_role:
     employee: 2
 disabled: false
 node_limit:
-  global: 2
+  global: 3
   per_role:
-    employee: 1
+    employee: 2
 rate_limit:
   global:
-    max_reqs_per_min: 5
+    max_reqs_per_min: 15
     unique_params: null
   per_role:
     employee:
-      max_reqs_per_min: 3
+      max_reqs_per_min: 2
       unique_params: null
 time_limit:
-  global: 10
+  global: 20
   per_role:
-    employee: 5
+    employee: 10

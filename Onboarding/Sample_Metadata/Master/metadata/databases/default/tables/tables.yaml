@@ -1,2 +1,3 @@
-- "!include public_initiatives.yaml"
-- "!include public_projects.yaml"
+- "!include public_compensation.yaml"
+- "!include public_employees.yaml"
+- "!include public_teams.yaml"

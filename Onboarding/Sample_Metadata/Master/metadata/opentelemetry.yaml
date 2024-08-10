@@ -1,15 +1,1 @@
-status: enabled
-data_types:
-  - traces
-  - metrics
-  - logs
-exporter_otlp:
-  headers: []
-  otlp_logs_endpoint: http://143.198.73.186:4318/v1/logs
-  otlp_metrics_endpoint: http://143.198.73.186:4318/v1/metrics
-  otlp_traces_endpoint: http://143.198.73.186:4318/v1/traces
-  protocol: http/protobuf
-  resource_attributes: []
-  traces_propagators: []
-batch_span_processor:
-  max_export_batch_size: 512
+{}
