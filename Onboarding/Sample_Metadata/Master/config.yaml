@@ -1,6 +1,6 @@
 version: 3
 endpoint: <YOUR_HASURA_ENDPOINT>
-admin_secret: <YOUR_HASURA_ADMIN_SECRET>
+admin_secret: <YOUR_HASURA_SECRET>
 metadata_directory: metadata
 actions:
   kind: synchronous
