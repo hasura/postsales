@@ -1,0 +1,1 @@
+https://hasura.io/blog/handling-graphql-hasura-errors-with-react

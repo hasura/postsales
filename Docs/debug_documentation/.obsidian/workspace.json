@@ -11,8 +11,12 @@
             "id": "a9d4c62e8ec7fc6f",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "V2 Doc/Glossary.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -81,6 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "V2 Doc/Glossary.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "V2 Doc/Glossary.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,7 +124,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "V2 Doc/Glossary.md"
+              }
             }
           }
         ]
@@ -139,5 +147,42 @@
     }
   },
   "active": "a9d4c62e8ec7fc6f",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "V2 Doc/Get Support.md",
+    "V2 Doc/Observability/Traces.md",
+    "V2 Doc/Observability/Reference Docs.md",
+    "V2 Doc/Observability/Metrics.md",
+    "V2 Doc/Observability/Logs.md",
+    "V2 Doc/Observability/Debugging process.md",
+    "V2 Doc/Issues/Permission Issues/Common Issues.md",
+    "V2 Doc/Issues/Performance Issue/Slow Queries.md",
+    "V2 Doc/Issues/Performance Issue/Response Times.md",
+    "V2 Doc/Issues/Performance Issue/Response Error.md",
+    "V2 Doc/Issues/Performance Issue/Overview.md",
+    "V2 Doc/Issues/Ops Matrix - Commands, Scripts and Playbook/Postgres.md",
+    "V2 Doc/Issues/Ops Matrix - Commands, Scripts and Playbook/Kubernetes.md",
+    "V2 Doc/Issues/Memory Issues/Out of Memory ( OOM ) Errors.md",
+    "V2 Doc/Issues/Memory Issues/Memory Leaks.md",
+    "V2 Doc/Issues/Memory Issues/Common Commands.md",
+    "V2 Doc/Issues/GraphQL Errors/Server - Network Errors.md",
+    "V2 Doc/Issues/GraphQL Errors/Overview.md",
+    "V2 Doc/Issues/GraphQL Errors/Nulls in GraphQL.md",
+    "V2 Doc/Issues/GraphQL Errors/Client Side Problems.md",
+    "V2 Doc/Issues/GraphQL Errors/Handling GraphQL Errors with Hasura & React.md",
+    "V2 Doc/Issues/Database Issue/Common Issues.md",
+    "V2 Doc/Issues/Database Issue/Overview.md",
+    "V2 Doc/Issues/Data Inconsistency/Stale Data.md",
+    "V2 Doc/Issues/Data Inconsistency/Data Mismatches.md",
+    "V2 Doc/Issues/Console Issues/Common.md",
+    "V2 Doc",
+    "V2 Doc/Issues/Console Issues",
+    "V2 Doc/Issues/GraphQL Errors",
+    "V2 Doc/Issues/Memory Issues",
+    "V2 Doc/Issues/Performance Issue",
+    "V2 Doc/Issues/Database Issue",
+    "V2 Doc/Issues/Data Inconsistency",
+    "V2 Doc/Issues/Ops Matrix - Commands, Scripts and Playbook",
+    "V2 Doc/Issues/Authentication Issues",
+    "V2 Doc/Issues/Permission Issues"
+  ]
 }

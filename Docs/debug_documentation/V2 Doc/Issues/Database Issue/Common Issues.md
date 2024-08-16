@@ -1,0 +1,6 @@
+- **Database Unreachable**
+    - Verify database server status.
+    - Check connection strings and credentials.
+- **Timeouts**
+    - Ensure the database is not overloaded.
+    - Adjust ——-

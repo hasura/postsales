@@ -1,0 +1,6 @@
+- **Loading Failures**
+    - Check browser console for error messages.
+    - Ensure network requests are not being blocked.
+- **UI Bugs**
+    - Report issues on Hasura’s GitHub repository.
+    - Check for updates or patches from Hasura.
