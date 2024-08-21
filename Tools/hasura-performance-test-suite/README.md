@@ -35,11 +35,13 @@ The system has multiple components which can be configured.
 
 #### UI-CLI
 
-The tests can be performed via ui comes up with docker image, and also with cli
+Tests can be performed using the UI provided by the Docker image, or through the CLI.
 
 #### Github-actions
 
-The test can be configured to run via github action at enterprise level. The secret is to be added in the github secret 
+Tests can be configured to run via GitHub Actions at the enterprise level. Secrets should be added to GitHub Secrets in the following format:
+
+
 ```
 {
     "endpoint1":"secret1",
