@@ -1,16 +1,19 @@
 1) About Hasura Testsuite
 
-Hasura test-suite is an open source tool built around the Artillery open source framework. We have optimized this to work beter with Hasures V2, being able to use this tool as your single source to perform both functional validations and performance testing of a Hasura deployment.
+Hasura test-suite is an open source tool built around the Artillery open source framework. We have optimized this to work beter with Hasures V2, being able to use this tool as your single source to perform both functional validations and performance testing of any Hasura deployment. HTS supports both self-hosted and Hasura cloud deployments of Hasura. DDN support is coming next week.
 
-  1.1) Overview
+    1.1) Overview
 
-  1.2) Components
+    1.2) Components
 
-  1.3) Modes of deployment
+      1.2.1) Artillery Framework
+      1.2.2) Prometheus Pushgateway
 
-  1.4) Features
+    1.3) Modes of deployment
 
-  1.5) Advantages over other test-suites
+    1.4) Features
+
+    1.5) Advantages over other test-suites`
 
 2) Deployment
 
