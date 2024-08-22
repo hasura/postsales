@@ -2,13 +2,16 @@
 
 ## 1. About HTS
 
-Hasura test-suite is an open source tool built around the Artillery open source framework. We have optimized this to work beter with Hasures V2, being able to use this tool as your single source to perform both functional validations and performance testing of any Hasura deployment. HTS supports both self-hosted and Hasura cloud deployments of Hasura. DDN support is coming next week.
+Hasura test-suite is an open source tool built around the Artillery open source framework. We have optimized this to work beter with Hasura V2, being able to use this tool as your single source to perform both functional validations and performance testing of any Hasura deployment. HTS supports both self-hosted and Hasura cloud deployments of Hasura. DDN support is coming next week.
 
 ### 1.1. Overview
 
 ### 1.2. Components
 
 #### 1.2.1. Artillery Framework
+Artillery is designed for testing backend systems, such as API services, ecommerce backends, chat systems, game backends, databases, message brokers and queues, and anything else that can be communicated with over a network.
+
+It can be used to test any backend regardless of what protocol it speaks or what language it's written in. Artillery supports HTTP, WebSocket, and Socket.io out of the box, and many additional protocols such as HLS, Kinesis, and Kafka via plugins. Support for additional protocols can be added via Artillery's plugin interface. Learn more at [Artillery Website](https://www.artillery.io/docs)
 
 #### 1.2.2. Prometheus Pushgateway
 
