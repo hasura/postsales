@@ -14,6 +14,7 @@ Artillery is designed for testing backend systems, such as API services, ecommer
 With Artillery, you can create test scripts that can test common workflows for GraphQL to smoke out any potential performance issues that can creep up when you least expect. Running regular load tests on your APIs both during development and against your production servers will keep your APIs performant and resilient for your customers. This article shows you how to use Artillery to keep your GraphQL services in check. Learn more at [Artillery Website](https://www.artillery.io/docs)
 
 #### 1.2.2. Prometheus Pushgateway
+The Prometheus Pushgateway exists to allow ephemeral and batch jobs to expose their metrics to Prometheus. Since these kinds of jobs may not exist long enough to be scraped, they can instead push their metrics to a Pushgateway. The Pushgateway then exposes these metrics to Prometheus. Learn more at [Prometheus Pushgateway Github](https://github.com/prometheus/pushgatewa)
 
 ### 1.3. Modes of Deployment
 
