@@ -1,22 +1,43 @@
 1) About Hasura Testsuite
+
+Hasura test-suite is an open source tool built around the Artillery open source framework. We have optimized this to work beter with Hasures V2, being able to use this tool as your single source to perform both functional validations and performance testing of a Hasura deployment.
+
   1.1) Overview
+
   1.2) Components
+
   1.3) Modes of deployment
+
   1.4) Features
+
   1.5) Advantages over other test-suites
+
 2) Deployment
+
   2.1) As a standalone tool
+
   2.2) As a github action
+
 3) Creating your first functional test-case
+
 4) Running a functional test
+
   4.1) From CLI or GH Actions
+
 5) Creating your first loadtest
+
 6) Running your first load-test
+
   6.1) Standalone mode, CLI or GH Actions
+
 7) View test results
+
   7.1) Included Grafana dashboards
+
 8) Current limitations
+
 9) Roadmap
+
 10) Provide feedback
 
 
