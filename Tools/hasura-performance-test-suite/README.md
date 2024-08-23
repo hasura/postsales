@@ -39,12 +39,15 @@ Artillery's command-line interface and configuration files make it easy to integ
 #### 1.5.9 GraphQL-native support
 
 Artillery has built-in support for GraphQL queries and mutations. It can parse GraphQL schemas and automatically generate valid requests, making it easier to create realistic test scenarios for GraphQL APIs.
-#### 1.5.10 Lightweight and open-source:
+#### 1.5.10 Lightweight and open-source
 
 Artillery is a lightweight, open-source tool that's easy to set up and integrate into CI/CD pipelines. It has a lower barrier to entry compared to say, NeoLoad's enterprise-focused approach.
-#### 1.5.11 Better suited for microservices:
+#### 1.5.11 Better suited for microservices
 
 Artillery's design makes it well-suited for testing microservices architectures, which often go hand-in-hand with GraphQL APIs.
+#### 1.5.12 Support for WebSocket testing
+
+If your GraphQL API uses subscriptions over WebSockets, Artillery has good support for this, which can be crucial for real-time applications.
 
 ## 2. Deploying HTS
 
