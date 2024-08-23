@@ -27,8 +27,8 @@ Grafana is a multi-platform open source analytics and interactive visualization 
 
 ### 1.5. Advantages over other testing frameworks
 #### 1.5.1 Only OSS components used to build the whole stack
-#### 1.5.2 Developed by Hasura, used internally by Hasura
-#### 1.5.3 Multiple Hasura customers using this tool to perform load and functional tests
+#### 1.5.2 Put together by Hasura, used internally by Hasura
+#### 1.5.3 Multiple Hasura enterprise customers using this tool to perform load and functional tests
 #### 1.5.4 CLI, GUI and CI/CD options available to run the tool as opposed to just GUI.
 #### 1.5.5 Easily extendable, easily customizable
 #### 1.5.6 Deploy it wherever you want - baremetal, cloud, virtual machines... 
