@@ -54,6 +54,7 @@ If your GraphQL API uses subscriptions over WebSockets, Artillery has good suppo
 ### 2.1. Standalone Mode
 
 Checkout the repository
+
 ``` git clone https://github.com/hasura/postsales/tree/main/Tools/hasura-performance-test-suite/ui-cli ```
 
 Make changes to your docker-compose.yaml file
@@ -61,6 +62,7 @@ Make changes to your docker-compose.yaml file
 If you have a component that you already have in your environment, you may remove that from the docker-compose.yaml file.
 
 Deploy using docker-compose
+
 ``` docker compose up -d ```
 
 ### 2.2. As a Github Action
