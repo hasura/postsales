@@ -59,7 +59,7 @@ Checkout the repository
 
 Make changes to your docker-compose.yaml file
 
-``` If you have a component that you already have in your environment, you may remove that from the docker-compose.yaml file. ```
+``` If you see a component in the docker-compose.yaml that you already have in your environment, you may remove that from the file. ```
 
 Deploy using docker-compose
 
