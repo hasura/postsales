@@ -105,6 +105,29 @@ expect.failed.{type} - count of failed expectations of {type}, for example: expe
 ```
 ## 4. Running your first functional test
 
+Run your script that uses expectations with:
+
+```artillery run --quiet my-script.yaml```
+
+(The --quiet option is to stop Artillery from printing its default reports to the console.)
+
+```config:
+  target: 'https://my.api.internal'
+  environments:
+    # This is our functional testing profile, with a single virtual user, and
+    # the plugin enabled.
+    #
+    functional:
+      phases:
+        - duration: 1
+          arrivalCount: 1
+      plugins:
+        expect: {}
+scenarios:
+  # Your scenario definitions go here.
+  ```
+
+
 ### 4.1. From CLI
 
 ### 4.2. From Github Actions
