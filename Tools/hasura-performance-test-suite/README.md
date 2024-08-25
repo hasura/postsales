@@ -69,6 +69,40 @@ Deploy using docker-compose
 
 ## 3. Creating your first functional test
 
+For you to run a functional test, you need to install the expect plugin for Artillery (This comes pre-installed here, you dont need to do anything additional.)
+The expect plugin adds support for checks and assertions on HTTP requests to enable functional testing in Artillery tests.
+### 3.1 Features
+Use expectations and assertions in your HTTP scenarios
+Use the same artillery command to run functional / acceptance tests on your APIs
+See details of any failed assertions (request headers & body, response etc)
+Run post-deployment smoke tests from CI/CD pipelines
+### 3.2 Add expectations to HTTP requests
+```
+scenarios:
+  - name: Get a movie
+    flow:
+      - get:
+          url: '/graphql'
+          capture:
+            - json: '$[5].title'
+              as: title
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - equals:
+                - 'From Dusk Till Dawn'
+                - '{{ title }}'
+```
+### 3.3 Metrics
+
+The plugin tracks successful and failed expectations with custom metrics.
+
+```
+expect.ok - count of all expectations that have been successful
+expect.failed - count of all expectations that failed
+expect.ok.{type} - count of successful expectations of {type}, for example: expect.ok.statusCode for statusCode expectations
+expect.failed.{type} - count of failed expectations of {type}, for example: expect.failed.statusCode for statusCode expectations
+```
 ## 4. Running your first functional test
 
 ### 4.1. From CLI
