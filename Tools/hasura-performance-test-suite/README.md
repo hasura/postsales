@@ -14,7 +14,15 @@ Artillery is designed for testing backend systems, such as API services, ecommer
 With Artillery, you can create test scripts that can test common workflows for GraphQL to smoke out any potential performance issues that can creep up when you least expect. Running regular load tests on your APIs both during development and against your production servers will keep your APIs performant and resilient for your customers. This article shows you how to use Artillery to keep your GraphQL services in check. Learn more at [Artillery Website](https://www.artillery.io/docs)
 
 #### 1.2.2. Prometheus Pushgateway
-The Prometheus Pushgateway exists to allow ephemeral and batch jobs to expose their metrics to Prometheus. Since these kinds of jobs may not exist long enough to be scraped, they can instead push their metrics to a Pushgateway. The Pushgateway then exposes these metrics to Prometheus. In our specific example, we use the Pushgateway to export the Artillery Test metrics to the Prometheus instance deployed as part of HTS (or to your existing Prometheus environment) and use these metrics to create charts. Learn more at [Prometheus Pushgateway Github](https://github.com/prometheus/pushgatewa)
+The Prometheus Pushgateway exists to allow ephemeral and batch jobs to expose their metrics to Prometheus. Since these kinds of jobs may not exist long enough to be scraped, they can instead push their metrics to a Pushgateway. The Pushgateway then exposes these metrics to Prometheus. In our specific example, we use the Pushgateway to export the Artillery Test metrics to the Prometheus instance deployed as part of HTS (or to your existing Prometheus environment) and use these metrics to create charts. Learn more at [Prometheus Pushgateway Github](https://github.com/prometheus/pushgateway)
+
+You can deploy the Pushgateway using the prom/pushgateway Docker image.
+
+```sh
+docker pull prom/pushgateway
+
+docker run -d -p 9091:9091 prom/pushgateway
+```
 
 #### 1.2.3. Grafana
 
@@ -49,6 +57,11 @@ Artillery's design makes it well-suited for testing microservices architectures,
 
 If your GraphQL API uses subscriptions over WebSockets, Artillery has good support for this, which can be crucial for real-time applications.
 
+#### 1.5.12 Support for Mutations testing
+
+If your GraphQL API uses Mutations, Artillery has good support for this, which can be crucial for real-time applications.
+
+
 ## 2. Deploying HTS
 
 ### 2.1. Standalone Mode
@@ -67,7 +80,25 @@ Deploy using docker-compose
 
 ### 2.2. As a Github Action
 
-## 3. Creating your first functional test
+- Clone the Repository and Push to Your Own Repository
+
+  ``` https://github.com/hasura/postsales/tree/main/Tools/hasura-performance-test-suite/actions-config ```
+
+- Configure the GraphQL Endpoint and Hasura Admin Secret
+
+  ```json
+  {
+      "endpoint1":"secret1",
+      "endpoint2":"secret2",
+  }
+  ```
+
+  ```Note: You can modify the configuration to accept other headers ( if any ) and, Also can pass the admin secret as an input parameter in action workflow using the file```
+
+```Note: It is adivisable to use custom runner for your tests```
+
+
+## 3. Creating your first functional/Load test
 
 For you to run a functional test, you need to install the expect plugin for Artillery (This comes pre-installed here, you dont need to do anything additional.)
 The expect plugin adds support for checks and assertions on HTTP requests to enable functional testing in Artillery tests.
@@ -107,7 +138,7 @@ expect.failed - count of all expectations that failed
 expect.ok.{type} - count of successful expectations of {type}, for example: expect.ok.statusCode for statusCode expectations
 expect.failed.{type} - count of failed expectations of {type}, for example: expect.failed.statusCode for statusCode expectations
 ```
-## 4. Running your first functional test
+## 4. Running your first functional/load test
 
 Run your script that uses expectations with:
 
@@ -135,6 +166,97 @@ scenarios:
 ### 4.1. From CLI
 
 ### 4.2. From Github Actions
+
+#### 4.2.1 Input Parameters 
+
+  - `GRAPHQL_ENDPOINT`: The GraphQL endpoint for your Hasura Instance
+  - `HASURA_ADMIN_SECRET`:  Value of X_HASURA_ADMIN_SECRET
+  - `TEST_DURATION`: Test duration in seconds (or Xh to set in hours)
+  - `STARTING_ARRIVAL_RATE`: Starting calls per second value.
+  - `ENDING_ARRIVAL_RATE`: At the end of your test duration, this will be your calls per second.
+  - `MAXIMUM_VIRTUAL_USER`: Maximum number of virtual users
+  - `TEST_NAME`:  A unique name for this test run to identify in Grafana (PG_6hr_loadtest)
+  - `PUSHGATEWAY`: This is a component that pushes metrics to Prometheus. Enter the IP Address
+  - `Service Name`: Folder level
+  - `QUERY_FILE`: .graphql file name for load test and .yaml file for functional test in service folder
+
+
+#### 4.2.2 Workflow for Functional/Load test
+
+- Add Load and Functional Test Cases
+
+  1. Load test file should be .graphql having all your queries
+
+      example:
+
+        ```gql
+        query ArtistId {
+          Artist (limit: 10) {
+            ArtistId
+          }
+        }
+
+        query ArtistName {
+          Artist (limit: 10) {
+            ArtistId
+            Name
+          }
+        }
+
+        query getCustomer {
+          Customer (limit: 10) {
+            City
+            Company
+            Country
+          }
+        }
+
+        ```
+
+  2. Functional test cases should be artillery scenarios
+
+        example:
+
+        ```yaml
+        config:
+        scenarios:
+          - name: 'Passing null value for non-nullable type with default value'
+            flow:
+              - post:
+                  url: "/"
+                  json:
+                    query: |
+                      query Album($limit: Int! = 1) {
+                          Album(limit: $limit) {
+                            AlbumId
+                            Title
+                          }
+                        }
+                    variables:
+                      limit: null
+                  capture:
+                    json: '$.errors[0].message'
+                    as: 'passing_null_non_nullable_default_error'
+              - match:
+                  statusCode: 200
+                  json:
+                    errors:
+                      - extensions:
+                          code: validation-failed
+                          path: "$"
+                        message: 'null value found for non-nullable type: "Int!"'
+        ```
+
+- Run the Workflow
+  Navigate to the Actions tab in your repository, select the appropriate workflow, and click Run workflow to execute the tests.
+
+  1. HTS - Functional Tests
+  2. HTS - Load Tests
+
+- On the Action workflow trigger Select `Run workflow`
+
+  Add the required parameters and run the tests
+  
 
 ## 5. Creating your first load test
 
