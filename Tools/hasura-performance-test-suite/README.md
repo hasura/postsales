@@ -26,17 +26,17 @@ Grafana is a multi-platform open source analytics and interactive visualization 
 ### 1.4. Features
 
 ### 1.5. Advantages over other testing frameworks
-#### 1.5.1 Only OSS components used to build the whole stack
-#### 1.5.2 Put together by Hasura, used internally by Hasura
-#### 1.5.3 Multiple Hasura enterprise customers using this tool to perform load and functional tests
-#### 1.5.4 CLI, GUI and CI/CD options available to run the tool as opposed to just GUI.
+* Only OSS components used to build the whole stack
+* Put together by Hasura, used internally by Hasura
+* Multiple Hasura enterprise customers using this tool to perform load and functional tests
+* CLI, GUI and CI/CD options available to run the tool as opposed to just GUI.
 
 Artillery's command-line interface and configuration files make it easy to integrate into continuous integration and deployment pipelines.
-#### 1.5.5 Easily extendable, easily customizable
-#### 1.5.6 Deploy it wherever you want - baremetal, cloud, virtual machines...
-#### 1.5.7 Hasura provided dashboards to view the results which are frequently updated.
-#### 1.5.8 Always up-to-date with Hasura version changes
-#### 1.5.9 GraphQL-native support
+* Easily extendable, easily customizable
+* Deploy it wherever you want - baremetal, cloud, virtual machines...
+* Hasura provided dashboards to view the results which are frequently updated.
+* Always up-to-date with Hasura version changes
+* GraphQL-native support
 
 Artillery has built-in support for GraphQL queries and mutations. It can parse GraphQL schemas and automatically generate valid requests, making it easier to create realistic test scenarios for GraphQL APIs.
 #### 1.5.10 Lightweight and open-source
