@@ -167,6 +167,22 @@ scenarios:
 
 ### 4.2. From Github Actions
 
+#### 4.2.1 Input Parameters 
+
+  - `GRAPHQL_ENDPOINT`: The GraphQL endpoint for your Hasura Instance
+  - `HASURA_ADMIN_SECRET`:  Value of X_HASURA_ADMIN_SECRET
+  - `TEST_DURATION`: Test duration in seconds (or Xh to set in hours)
+  - `STARTING_ARRIVAL_RATE`: Starting calls per second value.
+  - `ENDING_ARRIVAL_RATE`: At the end of your test duration, this will be your calls per second.
+  - `MAXIMUM_VIRTUAL_USER`: Maximum number of virtual users
+  - `TEST_NAME`:  A unique name for this test run to identify in Grafana (PG_6hr_loadtest)
+  - `PUSHGATEWAY`: This is a component that pushes metrics to Prometheus. Enter the IP Address
+  - `Service Name`: Folder level
+  - `QUERY_FILE`: .graphql file name for load test and .yaml file for functional test in service folder
+
+
+#### 4.2.2 Workflow for Functional/Load test
+
 - Add Load and Functional Test Cases
 
   1. Load test file should be .graphql having all your queries
@@ -197,7 +213,7 @@ scenarios:
 
         ```
 
-    2. Functional test cases should be artillery scenarios
+  2. Functional test cases should be artillery scenarios
 
         example:
 
