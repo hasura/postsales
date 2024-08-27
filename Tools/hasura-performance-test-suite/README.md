@@ -172,7 +172,8 @@ scenarios:
 
  1. Install Artillery: ```npm install -g artillery@latest```
   2. Create a test.yaml file with your test configurations.
-    ```yaml
+
+    ```
     config:
       target: <GRAPHQL_ENDPOINT>
       defaults:
