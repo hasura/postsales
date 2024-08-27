@@ -30,6 +30,97 @@ Grafana is a multi-platform open source analytics and interactive visualization 
 
 
 ### 1.3. Modes of Deployment
+- Docker Compose on a Web Server: Deploy using a Docker Compose file.
+- GitHub Action with Custom Runner: Set up the deployment within a GitHub Action workflow, using a custom runner.
+- Local Execution Without Configuration: Run the tool locally with minimal setup by following these three simple steps:
+  1. Install Artillery: ```npm install -g artillery@latest```
+  2. Create a test.yaml file with your test configurations.
+    ```yaml
+    config:
+      target: <GRAPHQL_ENDPOINT>
+      defaults:
+          headers:
+            x-hasura-admin-secret: <ADMIN_SECRET>
+            # add additional header (if any)
+      phases:
+        - duration: 60
+          arrivalRate: 1
+          rampTo: 5
+          name: Warm up phase
+        - duration: 60
+          arrivalRate: 5
+          rampTo: 10
+          name: Ramp up load
+        - duration: 30
+    
+      plugins:
+        metrics-by-endpoint:
+          useOnlyRequestNames: true
+          metricsNamespace: operation
+    
+      publish-metrics:
+      - type: prometheus
+        pushgateway: "http://143.198.129.138:9091"
+        tags:
+          - "testId: testName"
+          - "type:loadtest"
+        ssl: false
+    
+      expect: 
+      reportFailuresAsErrors: true
+      outputFormat: json
+    
+    scenarios:
+    
+      - name: 'Create and fetch messages flow'
+        flow:
+          - post:
+              url: '/'
+              json:
+                query: |
+                    query GetEmployee {
+                      Employee(limit: 10) {
+                        Country
+                        BirthDate
+                        City
+                        Address
+                        EmployeeId
+                        Fax
+                        FirstName
+                      }
+                    }
+    
+    
+      - name: 'Passing null value for non-nullable type with default value'
+        flow:
+          - post:
+              url: "/"
+              json:
+                query: |
+                  query Album($limit: Int! = 1) {
+                      Album(limit: $limit) {
+                        AlbumId
+                        Title
+                      }
+                    }
+                variables:
+                  limit: null
+              capture:
+                json: '$.errors[0].message'
+                as: 'passing_null_non_nullable_default_error'
+          - match:
+              statusCode: 200
+              json:
+                errors:
+                  - extensions:
+                      code: validation-failed
+                      path: "$"
+                    message: 'null value found for non-nullable type: "Int!"'
+
+    ```
+  3. Run the test: artillery run test.yaml
+
+`Note: Queries can be looped and mutations can be tested using the [UI-CLI](https://github.com/hasura/postsales/tree/main/Tools/hasura-performance-test-suite/ui-cli/cli)`
 
 ### 1.4. Features
 
