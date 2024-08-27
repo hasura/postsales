@@ -256,6 +256,7 @@ scenarios:
                     message: 'null value found for non-nullable type: "Int!"'
 
     ```
+
   3. Run the test: artillery run test.yaml
   
 
