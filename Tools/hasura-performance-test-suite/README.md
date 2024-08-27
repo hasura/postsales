@@ -354,9 +354,23 @@ Note: Queries can be looped and mutations can be tested using the [UI-CLI](https
   Add the required parameters and run the tests
   
 ## 5. Viewing your test results
+ - A report can be generated for each tests [Artillery report](https://www.artillery.io/docs/reference/cli/report)
+  ```sh
+  artillery report [options] <file>
+  ```
+ - Custom Grafana Dashboards
+<img width="1725" alt="Screenshot 2024-08-27 at 5 26 36 PM" src="https://github.com/user-attachments/assets/eb64dd6c-2ecc-4bbf-8391-a5dc0c8a9262">
+<img width="1725" alt="Screenshot 2024-08-27 at 5 26 50 PM" src="https://github.com/user-attachments/assets/82841b86-2714-4cc7-94e2-ad1c4bb6005a">
+<img width="1725" alt="Screenshot 2024-08-27 at 5 27 05 PM" src="https://github.com/user-attachments/assets/26d547d0-d8d9-48d4-848b-ed029f024f4b">
+<img width="1725" alt="Screenshot 2024-08-27 at 5 27 21 PM" src="https://github.com/user-attachments/assets/c4d4eee3-58e2-4a91-bde2-70f9107571b3">
+
+
 
 ## 6. Current Limitations
+- UI improvements
+- Mutations support on UI
 
 ## 7. Roadmap
+
 
 ## 8. Feedback
