@@ -257,21 +257,10 @@ scenarios:
 
   Add the required parameters and run the tests
   
+## 5. Viewing your test results
 
-## 5. Creating your first load test
+## 6. Current Limitations
 
-## 6. Running your first load-test
+## 7. Roadmap
 
-### 6.1. Standalone Mode
-
-### 6.2. CLI
-
-### 6.3. Github Action
-
-## 7. Viewing your test results
-
-## 8. Current Limitations
-
-## 9. Roadmap
-
-## 10. Feedback
+## 8. Feedback
