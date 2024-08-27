@@ -1,27 +1,12 @@
 overwrite: true
 schema: 
-  - ${HASURA_PROJECT_ENDPOINT}:
+  - ${GRAPHQL_ENDPOINT}:
       headers:
        x-hasura-admin-secret: "${HASURA_ADMIN_SECRET}"
-documents:
-  - src/**/*.{gql,graphql}
+# documents:
+#   - ../queries/**/*.{gql,graphql}
 generates:
-  # src/q/queries.graphql:  # Output a single .graphql file
-  #     plugins:
-  #       - add:
-  #           content: '// THIS FILE WAS GENERATED AUTOMATICALLY BY GRAPHQL CODEGEN. DO NOT EDIT MANUALLY.'
-  
-  schemaGenerator/schema.ts:
-    plugins:
-      - typescript:
-              scalars:
-                Int: number
-                UUID: string
-                timestamptz: string
-      - typescript-operations:
-              skipTypename: true
-
-  schemaGenerator/schema.graphql:
+  graphQL/schema/schema.graphql:
     plugins:
       - schema-ast
 
