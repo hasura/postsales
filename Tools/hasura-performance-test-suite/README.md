@@ -69,9 +69,9 @@ If your GraphQL API uses Mutations, Artillery has good support for this, which c
 
 ### 2.1. Standalone Mode
 
-Checkout the repository
+Checkout to the path in the repository
 
-``` git clone https://github.com/hasura/postsales/tree/main/Tools/hasura-performance-test-suite/ui-cli ```
+``` https://github.com/hasura/postsales/tree/main/Tools/hasura-performance-test-suite/ui-cli ```
 
 Make changes to your docker-compose.yaml file
 
