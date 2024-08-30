@@ -2,7 +2,7 @@
 
 ## 1. About HTS
 
-Hasura Test Suite (HTS) is an open source tool built around the Artillery open source framework. We have optimized this to work beter with Hasura V2, being able to use this tool as your single source to perform both functional validations and performance testing of any Hasura deployment. HTS supports both self-hosted and Hasura cloud deployments of Hasura. DDN support is coming next week.
+Hasura Test Suite (HTS) is an open source tool built around the Artillery open source framework. We have optimized this to work better with Hasura V2, being able to use this tool as your single source to perform both functional validations and performance testing of any Hasura deployment. HTS supports both self-hosted and Hasura cloud deployments of Hasura. DDN support is coming next week.
 
 ### 1.1. Overview
 
