@@ -23,8 +23,39 @@
 
 5. Add all the .graphql files in the `queries` folder, following the syntax/example
 
+    ```
+    query Cart {
+      cartItems(limit: 10) {
+        cartId
+        createdAt
+        id
+        productId
+        quantity
+      }
+    }
+    query GetCarts {
+      carts(limit: 10) {
+        id
+        isComplete
+        isReminderSent
+        updatedAt
+        userId
+      }
+    }
+    query GetCoupons {
+      coupons(limit: 10) {
+        amount
+        code
+        createdAt
+        expirationDate
+        id
+      }
+    }
+        
+    ```
 
-Note: Queries of only one file will be tested.
+
+    Note: Queries of only one file will be tested.
 
 6. Update the env variables, each explained below
   - `GRAPHQL_ENDPOINT`: The GraphQL endpoint for your Hasura Instance
@@ -57,65 +88,65 @@ Note: Queries of only one file will be tested.
    npm install -g artillery@2.0.14
    ```
 
-5. Add the functional test scenarios file in the `functionalTest` folder, following the syntax/example
+3. Add the functional test scenarios file in the `functionalTest` folder, following the syntax/example
 
-  ```
-  config:
-scenarios:
-  - name: Null Scenario
-    flow:
-      - post:
-          url: "/"
-          json:
-            query: | 
-              query testQuery($userid: Int!) {
-                playing_with_neon(where: {id: {_eq: $userid}}) {
-                  name
-                  id
-                }
-              }
-            
-            variables:
-              userid:1
-          expect:
-            - statusCode:200
-  - loop:
-    - post:
-        url: '/'
-        json:
-          query: |
-            mutation MyMutation($name: String!) {
-                insert_playing_with_neon(objects: {name: $name}) {
-                  returning {
-                    id
-                    name
+   ```
+      config:
+    scenarios:
+      - name: Null Scenario
+        flow:
+          - post:
+              url: "/"
+              json:
+                query: | 
+                  query testQuery($userid: Int!) {
+                    playing_with_neon(where: {id: {_eq: $userid}}) {
+                      name
+                      id
+                    }
                   }
-                }
-              }
-          variables:
-            name: '{{ $randomString() }}'
-        capture:
-                - json: '$.data.insert_playing_with_neon.returning[0].id'
-                  as: id
-    count: 100
+                
+                variables:
+                  userid:1
+              expect:
+                - statusCode:200
+      - loop:
+        - post:
+            url: '/'
+            json:
+              query: |
+                mutation MyMutation($name: String!) {
+                    insert_playing_with_neon(objects: {name: $name}) {
+                      returning {
+                        id
+                        name
+                      }
+                    }
+                  }
+              variables:
+                name: '{{ $randomString() }}'
+            capture:
+                    - json: '$.data.insert_playing_with_neon.returning[0].id'
+                      as: id
+        count: 100
+    
+      - name: Delete data
+        flow:
+          - post:
+              url: '/'
+              json:
+                query: |
+                 mutation deleteData($id: Int!) {
+                    delete_playing_with_neon(where: {id: {_eq: $id}}) {
+                      affected_rows
+                    }
+                  }
+                variables:
+                  id: '{{ id }}'
+    
+      ```
 
-  - name: Delete data
-    flow:
-      - post:
-          url: '/'
-          json:
-            query: |
-             mutation deleteData($id: Int!) {
-                delete_playing_with_neon(where: {id: {_eq: $id}}) {
-                  affected_rows
-                }
-              }
-            variables:
-              id: '{{ id }}'
-
-  ```
-
-5. Update the env variables, each explained below
+4. Update the env variables, each explained below
   - `GRAPHQL_ENDPOINT`: The GraphQL endpoint for your Hasura Instance
   - `HASURA_CLOUD_PAT`:  Value of HASURA_CLOUD_PAT
   - `TEST_DURATION`: Test duration in seconds (or Xh to set in hours)
@@ -126,14 +157,14 @@ scenarios:
   - `PUSHGATEWAY`: This is a component that pushes metrics to Prometheus. Enter the IP Address
 
 
-6. Run the test
-   ```sh
+5. Run the test
+```sh
   artillery run --config funtionalTest.yaml <file_name.yaml>
-   
-  example: artillery run --config funtionalTest.yaml functionalTest/validations.yaml
-   ```
-7. Checkout the metrics & dashboards on Grafana
+```
+`example: artillery run --config funtionalTest.yaml functionalTest/validations.yaml`
 
+
+6. Checkout the metrics & dashboards on Grafana
 
 
 
@@ -143,89 +174,89 @@ scenarios:
  1. Install Artillery: ```npm install -g artillery@latest```
   2. Create a test.yaml file with your test configurations.
 
-    ```
-    config:
-      target: <GRAPHQL_ENDPOINT>
-      defaults:
-          headers:
-            x-hasura-admin-secret: <ADMIN_SECRET>
-            # add additional header (if any)
-      phases:
-        - duration: 60
-          arrivalRate: 1
-          rampTo: 1
-          name: Warm up phase
-        - duration: 60
-          arrivalRate: 5
-          rampTo: 10
-          name: Ramp up load
-        - duration: 30
-    
-      plugins:
-        metrics-by-endpoint:
-          useOnlyRequestNames: true
-          metricsNamespace: operation
-    
-      publish-metrics:
-      - type: prometheus
-        pushgateway: "http://143.198.129.138:9091"
-        tags:
-          - "testId: testName"
-          - "type:loadtest"
-        ssl: false
-    
-      expect: 
-      reportFailuresAsErrors: true
-      outputFormat: json
-    
-    scenarios:
-    
-      - name: 'Create and fetch messages flow'
-        flow:
-          - post:
-              url: '/'
-              json:
-                query: |
-                    query GetEmployee {
-                      Employee(limit: 10) {
-                        Country
-                        BirthDate
-                        City
-                        Address
-                        EmployeeId
-                        Fax
-                        FirstName
-                      }
-                    }
-    
-    
-      - name: 'Passing null value for non-nullable type with default value'
-        flow:
-          - post:
-              url: "/"
-              json:
-                query: |
-                  query Album($limit: Int! = 1) {
-                      Album(limit: $limit) {
-                        AlbumId
-                        Title
-                      }
-                    }
-                variables:
-                  limit: null
-              capture:
-                json: '$.errors[0].message'
-                as: 'passing_null_non_nullable_default_error'
-          - match:
-              statusCode: 200
-              json:
-                errors:
-                  - extensions:
-                      code: validation-failed
-                      path: "$"
-                    message: 'null value found for non-nullable type: "Int!"'
+```
+config:
+  target: <GRAPHQL_ENDPOINT>
+  defaults:
+      headers:
+        x-hasura-admin-secret: <ADMIN_SECRET>
+        # add additional header (if any)
+  phases:
+    - duration: 60
+      arrivalRate: 1
+      rampTo: 1
+      name: Warm up phase
+    - duration: 60
+      arrivalRate: 5
+      rampTo: 10
+      name: Ramp up load
+    - duration: 30
 
-    ```
+  plugins:
+    metrics-by-endpoint:
+      useOnlyRequestNames: true
+      metricsNamespace: operation
+
+  publish-metrics:
+  - type: prometheus
+    pushgateway: "http://143.198.129.138:9091"
+    tags:
+      - "testId: testName"
+      - "type:loadtest"
+    ssl: false
+
+  expect: 
+  reportFailuresAsErrors: true
+  outputFormat: json
+
+scenarios:
+
+  - name: 'Create and fetch messages flow'
+    flow:
+      - post:
+          url: '/'
+          json:
+            query: |
+                query GetEmployee {
+                  Employee(limit: 10) {
+                    Country
+                    BirthDate
+                    City
+                    Address
+                    EmployeeId
+                    Fax
+                    FirstName
+                  }
+                }
+
+
+  - name: 'Passing null value for non-nullable type with default value'
+    flow:
+      - post:
+          url: "/"
+          json:
+            query: |
+              query Album($limit: Int! = 1) {
+                  Album(limit: $limit) {
+                    AlbumId
+                    Title
+                  }
+                }
+            variables:
+              limit: null
+          capture:
+            json: '$.errors[0].message'
+            as: 'passing_null_non_nullable_default_error'
+      - match:
+          statusCode: 200
+          json:
+            errors:
+              - extensions:
+                  code: validation-failed
+                  path: "$"
+                message: 'null value found for non-nullable type: "Int!"'
+
+```
 
   3. Run the test: 
 
