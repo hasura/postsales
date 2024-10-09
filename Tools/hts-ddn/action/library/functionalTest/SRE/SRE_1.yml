@@ -1,0 +1,7 @@
+config:
+scenarios:
+  - flow:
+    - get:
+        url: '/pets/f037ed9a'
+        expect:
+          - hasHeader: 'object-version'

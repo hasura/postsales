@@ -1,0 +1,84 @@
+name: HTS - DDN Functional Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      GRAPHQL_ENDPOINT:
+        description: 'GraphQL Endpoint'
+        required: true
+      TEST_DURATION:
+        description: 'Test Duration'
+        default: '100'
+        required: true
+      STARTING_ARRIVAL_RATE:
+        description: 'Starting Arrival Rate'
+        default: '1'
+        required: true
+      ENDING_ARRIVAL_RATE:
+        description: 'Ending Arrival Rate'
+        default: '20'
+        required: true
+      MAXIMUM_VIRTUAL_USER:
+        description: 'Maximum Virtual User'
+        default: '100'
+        required: true
+      TEST_NAME:
+        description: 'Test Name'
+        required: true
+      SERVICE_NAME:
+        description: 'Service Name'
+        required: true
+        type: choice
+        options: ['team3', 'team2', 'team1', 'SRE']
+      FUNCTIONAL_TEST_FILE:
+        description: 'Functional Test File'
+        required: true
+
+jobs:
+  hts-functional-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Artillery globally
+      run: npm install -g artillery@2.0.14 dotenv-cli
+
+    - name: Set environment variables
+      run: |
+        echo "GRAPHQL_ENDPOINT=${{ github.event.inputs.GRAPHQL_ENDPOINT }}" >> $GITHUB_ENV
+        echo "TEST_DURATION=${{ github.event.inputs.TEST_DURATION }}" >> $GITHUB_ENV
+        echo "STARTING_ARRIVAL_RATE=${{ github.event.inputs.STARTING_ARRIVAL_RATE }}" >> $GITHUB_ENV
+        echo "ENDING_ARRIVAL_RATE=${{ github.event.inputs.ENDING_ARRIVAL_RATE }}" >> $GITHUB_ENV
+        echo "MAXIMUM_VIRTUAL_USER=${{ github.event.inputs.MAXIMUM_VIRTUAL_USER }}" >> $GITHUB_ENV
+        echo "TEST_NAME=${{ github.event.inputs.TEST_NAME }}" >> $GITHUB_ENV
+        echo "PUSHGATEWAY=${{ github.event.inputs.PUSHGATEWAY }}" >> $GITHUB_ENV
+        echo "SERVICE_NAME=${{ github.event.inputs.SERVICE_NAME }}" >> $GITHUB_ENV
+        echo "QUERY_FILE=${{ github.event.inputs.FUNCTIONAL_TEST_FILE }}" >> $GITHUB_ENV
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Retrieve GraphQL Admin Secret
+      id: retrieve-secret
+      env:
+        HGE: ${{ secrets.HGE }}
+      run: |
+        python3 .github/scripts/get_secret.py
+        
+   # comment if not required
+    - name: Set HASURA_CLOUD_PAT
+      run: echo "HASURA_CLOUD_PAT=${{ steps.retrieve-secret.outputs.HASURA_CLOUD_PAT }}" >> $GITHUB_ENV
+
+    - name: Initiate Load Tests
+      run: |
+        export DEBUG=http,http:capture,http:response
+        artillery run --config .github/test-configs/functionalTest/functionalTest.yml library/functionalTest/${{ github.event.inputs.SERVICE_NAME }}/${{ github.event.inputs.FUNCTIONAL_TEST_FILE }}
