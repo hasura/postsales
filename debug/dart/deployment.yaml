@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-k8s-check
+  labels:
+    app: postgres-k8s-check
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-k8s-check
+  template:
+    metadata:
+      labels:
+        app: postgres-k8s-check
+    spec:
+      containers:
+      - name: postgres-k8s-check
+        image: your-docker-repo/postgres-k8s-check:latest  # Replace with your image name
+        env:
+        - name: POSTGRES_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: secrets  # Name of the secret
+              key: POSTGRES_CONNECTION_STRING  # Key in the secret
+        - name: SERVICE_HOST
+          value: "api"
+        ports:
+        - containerPort: 8080  # Expose the port if needed for health checks or other services
