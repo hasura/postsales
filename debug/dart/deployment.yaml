@@ -22,7 +22,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: secrets  # Name of the secret
-              key: POSTGRES_CONNECTION_STRING  # Key in the secret
+              key: HASURA_GRAPHQL_DATABASE_URL # Key in the secret
         - name: SERVICE_HOST
           value: "api"
         ports:
