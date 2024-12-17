@@ -14,10 +14,10 @@ fi
 
 # Extract host, port, database, user from the PostgreSQL connection string
 CONN_STRING="$POSTGRES_CONNECTION_STRING"
-PG_HOST=$(echo $CONN_STRING | awk -F[@:] '{print $2}')
-PG_PORT=$(echo $CONN_STRING | awk -F[@:] '{print $3}')
-DB_NAME=$(echo $CONN_STRING | awk -F[/:] '{print $4}')
-USER=$(echo $CONN_STRING | awk -F[/:@] '{print $2}')
+PG_HOST=$(echo $CONN_STRING | awk -F[@:] '{print $4}')
+PG_PORT=$(echo $CONN_STRING | awk -F[:/@] '{print $7}')
+DB_NAME=$(echo $CONN_STRING | awk -F[:/@] '{print $8}')
+USER=$(echo $CONN_STRING | awk -F[/:@] '{print $4}')
 
 # Check connectivity to PostgreSQL using telnet
 echo "Checking connectivity to PostgreSQL at ${PG_HOST}:${PG_PORT}..."

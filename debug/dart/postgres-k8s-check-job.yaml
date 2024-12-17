@@ -1,22 +1,19 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: postgres-k8s-check
+  name: postgres-k8s-check-job
   labels:
     app: postgres-k8s-check
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: postgres-k8s-check
   template:
     metadata:
       labels:
         app: postgres-k8s-check
     spec:
+      serviceAccountName: api # Replace with the service account name which has access to image-pull-secret
       containers:
       - name: postgres-k8s-check
-        image: your-docker-repo/postgres-k8s-check:latest  # Replace with your image name
+        image: gcr.io/hasura-ee/dart-debug:latest  # Replace with your image name
         env:
         - name: POSTGRES_CONNECTION_STRING
           valueFrom:
@@ -27,3 +24,5 @@ spec:
           value: "api"
         ports:
         - containerPort: 8080  # Expose the port if needed for health checks or other services
+      restartPolicy: Never  # Set to Never for Jobs to avoid restarting the container
+
