@@ -30,7 +30,7 @@ fi
 
 # Connect to PostgreSQL using psql
 echo "Connecting to PostgreSQL database '$DB_NAME' as user '$USER'..."
-psql "$POSTGRES_CONNECTION_STRING"
+psql "$POSTGRES_CONNECTION_STRING" -c "SELECT 1;"
 
 # Set the variables for the Kubernetes service from the environment variable
 SERVICE_PORT=8080
