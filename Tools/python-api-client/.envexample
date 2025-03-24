@@ -1,0 +1,5 @@
+AWS_COGNITO_DOMAIN="https://xyz.amazoncognito.com",
+AWS_COGNITO_APP_CLIENT_ID="abc",
+AWS_COGNITO_APP_CLIENT_SECRET="xyz",
+GRAPHQL_ENDPOINT="http://localhost:3280/graphql"
+X_HASURA_DDN_TOKEN="ddn-token"
