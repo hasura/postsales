@@ -63,7 +63,7 @@ class CognitoGraphQLClient:
             response.raise_for_status()
             
             token_data = response.json()
-            print('token_data',token_data)
+            # print('token_data',token_data)
             self.access_token = token_data['access_token']
             
             # Calculate token expiry time (default is 1 minute = 60 seconds)
