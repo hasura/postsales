@@ -3,9 +3,11 @@ import os
 import json
 from dotenv import load_dotenv
 from utils.cognitoGQLClient import CognitoGraphQLClient
+from flask import request, jsonify
 
 load_dotenv()
 
+# Create an instance of CognitoGraphQLClient
 def init_client_from_env():
     """Initialize the GraphQL client using environment variables"""
 
@@ -26,10 +28,7 @@ def init_client_from_env():
 
 client = init_client_from_env()
 
-def get_data():
-    # Create an instance of CognitoGraphQLClient
-    
-
+def get_fetch_sample_data():
     query = """
     query MyQuery {
         order(limit: 2) {
@@ -46,4 +45,31 @@ def get_data():
 
     except Exception as e:
         # Handle any exception that occurs
-        return {"error": f"Failed to fetch data: {str(e)}"}
+        return {"error": f"Failed to fetch sample data: {str(e)}"}
+
+def execute_graphql_query():
+    # Check if the request has JSON data
+    if not request.is_json:
+        return jsonify({"error": "Request must be JSON"}), 400
+    
+    # Get the request body
+    request_data = request.get_json()
+    
+    # Extract the query from the request body
+    query = request_data.get('query')
+    
+    # Optionally, extract variables if they exist
+    variables = request_data.get('variables', {})
+
+    # Example error handling
+    if not query:
+        return jsonify({"error": "No GraphQL query provided"}), 400
+    
+    try:
+        result = client.execute_query(query)
+        print("Query result:", json.dumps(result, indent=2))
+        return {"data": result}
+
+    except Exception as e:
+        # Handle any exception that occurs
+        return {"error": f"Failed to execute graphql query: {str(e)}"}
