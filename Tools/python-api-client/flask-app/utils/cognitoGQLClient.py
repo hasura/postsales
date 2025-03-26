@@ -29,7 +29,7 @@ class CognitoGraphQLClient:
         # Token management
         self.access_token = None
         self.token_expiry = None
-        self.refresh_interval = 55  # Refresh 5 seconds before expiry
+        self.refresh_interval = 120  # Refresh 120 seconds before expiry
         self.token_thread = None
         self._stop_token_refresh = threading.Event()
         
@@ -66,8 +66,8 @@ class CognitoGraphQLClient:
             # print('token_data',token_data)
             self.access_token = token_data['access_token']
             
-            # Calculate token expiry time (default is 1 minute = 60 seconds)
-            expires_in = token_data.get('expires_in', 60)
+            # Calculate token expiry time (default is 1 hr = 3600 seconds)
+            expires_in = token_data.get('expires_in', 3600)
             print('expires_in',expires_in)
             self.token_expiry = datetime.now() + timedelta(seconds=expires_in)
             
@@ -86,7 +86,7 @@ class CognitoGraphQLClient:
         """
         while not self._stop_token_refresh.is_set():
             # Check if token needs refresh (if it's expired or about to expire)
-            if self.token_expiry and datetime.now() > (self.token_expiry - timedelta(seconds=5)):
+            if self.token_expiry and datetime.now() > (self.token_expiry - timedelta(seconds=self.refresh_interval)):
                 try:
                     self.get_token()
                 except Exception as e:
