@@ -43,7 +43,7 @@ Since cognito GraphQL Client requires certain credentials, we'll need to create 
 Here's the screenshot of how flask app server works with cognito GQL client module
 ![Alt text](./flask_app_server_arch.png)
 
-`app.py` - The main `app.py` initiates flask app server with routes defined there. Here we have a single route ,i.e. `/fetch` where we have passed function handler.
+`app.py` - The main `app.py` initiates flask app server with routes defined there. Here we have a multiple routes defined , i.e. REST endpoints. In POST request `/execute-graphql` , you can dynamically pass GQL query via body and it will execute against Hasura API.
 
 `handlers/handler.py` - This file contains handler for function handlers of routes defined in flask app server.
 
