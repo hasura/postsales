@@ -9,5 +9,6 @@ jobs: # Run a job
     steps: # with these steps
       - uses: actions/checkout@v3 # checkout the repository
       - run: curl -L https://github.com/hasura/graphql-engine/raw/master/cli/get.sh | bash
-      - run: hasura apply --endpoint <YOUR_HASURA_GRAPHQL_ENDPOINT> --admin-secret <YOUR_HASURA_GRAPHQL_ADMIN_SECRET> . # then use the hasura CLI to deploy using repository secrets
+      - run: hasura metadata apply --endpoint <YOUR_HASURA_GRAPHQL_ENDPOINT> --admin-secret <YOUR_HASURA_GRAPHQL_ADMIN_SECRET> . # then use the hasura CLI to deploy using repository secrets
+      - run: hasura migrate apply --endpoint <YOUR_HASURA_GRAPHQL_ENDPOINT> --admin-secret <YOUR_HASURA_GRAPHQL_ADMIN_SECRET> . # then use the hasura CLI to deploy using repository secrets
       - run: hasura metadata reload --<YOUR_HASURA_GRAPHQL_ENDPOINT> --admin-secret <YOUR_HASURA_GRAPHQL_ADMIN_SECRET> .
