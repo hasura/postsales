@@ -88,10 +88,10 @@ If your GraphQL API uses Mutations, Artillery has good support for this, which c
 
 ## 2. Deploying HTS
 
-### 2.1. Hasura DDN: Please refer to the [documentation]()
+### 2.1. Hasura DDN: Please refer to the [documentation](https://github.com/hasura/postsales/blob/gk/test-suite-doc/Tools/hasura-test-suite/DDN/README.md)
 
 
-### 2.2. Hasura V2: Please refer to the [documentation]()
+### 2.2. Hasura V2: Please refer to the [documentation](https://github.com/hasura/postsales/blob/gk/test-suite-doc/Tools/hasura-test-suite/hasura-v2/README.md)
 
 
 ## 3. Creating your first functional/Load test
