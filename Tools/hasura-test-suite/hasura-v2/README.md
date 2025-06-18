@@ -1,10 +1,35 @@
 # Hasura Test Suite (HTS) Documentation
 
+## Table of contents
+
+- [Hasura Test Suite (HTS) Documentation](#hasura-test-suite-hts-documentation)
+  - [1. About HTS](#1-about-hts)
+    - [1.1. Overview](#11-overview)
+    - [1.2. Components](#12-components)
+    - [1.3. Modes of Deployment](#13-modes-of-deployment)
+    - [1.4. Features](#14-features)
+    - [1.5. Advantages over other testing frameworks](#15-advantages-over-other-testing-frameworks)
+  - [2. Deploying HTS](#2-deploying-hts)
+    - [2.1. Standalone Mode](#21-standalone-mode)
+  - [3. Creating your first functional/Load test](#3-creating-your-first-functionalload-test)
+    - [3.1 Features](#31-features)
+    - [3.2 Add expectations to HTTP requests](#32-add-expectations-to-http-requests)
+    - [3.3 Metrics](#33-metrics)
+  - [4. Running your first functional/load test](#4-running-your-first-functionalload-test)
+- [This is our functional testing profile, with a single virtual user, and](#this-is-our-functional-testing-profile-with-a-single-virtual-user-and)
+- [the plugin enabled.](#the-plugin-enabled)
+- [](#)
+- [Your scenario definitions go here.](#your-scenario-definitions-go-here)
+- [add additional header (if any)](#add-additional-header-if-any)
+
+
+
 ## 1. About HTS
 
 Hasura Test Suite (HTS) is an open source tool built around the Artillery open source framework. We have optimized this to work better with Hasura V2, being able to use this tool as your single source to perform both functional validations and performance testing of any Hasura deployment. HTS supports both self-hosted and Hasura cloud deployments of Hasura. DDN support is coming next week.
 
 ### 1.1. Overview
+
 
 ### 1.2. Components
 
@@ -374,5 +399,3 @@ Note: Queries can be looped and mutations can be tested using the [UI-CLI](https
 
 ## 7. Roadmap
 
-
-## 8. Feedback
