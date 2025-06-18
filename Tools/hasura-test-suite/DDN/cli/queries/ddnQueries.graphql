@@ -1,0 +1,27 @@
+query Cart {
+  cartItems(limit: 10) {
+    cartId
+    createdAt
+    id
+    productId
+    quantity
+  }
+}
+query GetCarts {
+  carts(limit: 10) {
+    id
+    isComplete
+    isReminderSent
+    updatedAt
+    userId
+  }
+}
+query GetCoupons {
+  coupons(limit: 10) {
+    amount
+    code
+    createdAt
+    expirationDate
+    id
+  }
+}

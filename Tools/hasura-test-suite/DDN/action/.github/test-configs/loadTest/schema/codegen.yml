@@ -1,0 +1,12 @@
+overwrite: true
+schema: 
+  - "${GRAPHQL_ENDPOINT}/graphql":
+      headers:
+        hasura_cloud_pat: ${HASURA_CLOUD_PAT}
+# documents:
+#   - ../queries/**/*.{gql,graphql}
+generates:
+  schema/schema.graphql:
+    plugins:
+      - schema-ast
+
