@@ -88,10 +88,9 @@ If your GraphQL API uses Mutations, Artillery has good support for this, which c
 
 ## 2. Deploying HTS
 
-### 2.1. Hasura DDN: Please refer to the [documentation](https://github.com/hasura/postsales/blob/gk/test-suite-doc/Tools/hasura-test-suite/DDN/README.md)
+2.1. Hasura DDN: Please refer to the [documentation](https://github.com/hasura/postsales/tree/main/Tools/hasura-test-suite/DDN#modes-of-deployment)
 
-
-### 2.2. Hasura V2: Please refer to the [documentation](https://github.com/hasura/postsales/blob/gk/test-suite-doc/Tools/hasura-test-suite/hasura-v2/README.md)
+2.2. Hasura V2: Please refer to the [documentation](https://github.com/hasura/postsales/tree/main/Tools/hasura-test-suite/hasura-v2#2-deploying-hts)
 
 
 ## 3. Creating your first functional/Load test
@@ -160,7 +159,7 @@ This will create a test-run-report.json.html file in the current directory which
 
 #### 3.4.1 Grafana Dashboards
 
-Grafana dashboards can be found here
+Grafana dashboards can be found [here](https://github.com/hasura/postsales/tree/main/Tools/hasura-test-suite/hasura-v2/ui-cli/grafana) 
 
 
 ## References:
