@@ -2,7 +2,8 @@ config:
   target:  "{{ $env.GRAPHQL_ENDPOINT }}"
   defaults:
     headers:
-      hasura_cloud_pat: "{{ $env.HASURA_CLOUD_PAT }}"  
+      x-hasura-ddn-token: "{{ $env.X_HASURA_DDN_TOKEN }}"  
+      Auth-Token: ${AuthTOKEN}
   phases:
     - duration: "{{ $env.TEST_DURATION }}"  
       arrivalRate: "{{ $env.STARTING_ARRIVAL_RATE }}"  

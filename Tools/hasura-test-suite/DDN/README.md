@@ -1,6 +1,85 @@
-# Run test via CLI
+# Hasura Test Suite (HTS): DDN Documentation
 
-## Load Testing
+## Table of contents
+
+- [Hasura Test Suite (HTS): DDN Documentation](#hasura-test-suite-hts-ddn-documentation)
+  - [About HTS](#about-hts)
+  - [Components](#components)
+    - [Artillery Framework](#artillery-framework)
+    - [Prometheus Pushgateway](#prometheus-pushgateway)
+    - [Grafana](#grafana)
+  - [Modes of Deployment](#modes-of-deployment)
+  - [Executing Tests](#executing-tests)
+    - [Load Testing](#load-testing)
+    - [Functional Testing](#functional-testing)
+  - [Local Execution Without Configuration:](#local-execution-without-configuration)
+
+
+
+## About HTS
+
+Hasura Test Suite (HTS) is an open source tool built around the Artillery open source framework. Being able to use this tool as your single source to perform both functional validations and performance testing of any Hasura deployment. HTS supports both self-hosted and Hasura cloud deployments of Hasura. 
+
+
+## Components
+
+### Artillery Framework
+Artillery is designed for testing backend systems, such as API services, ecommerce backends, chat systems, game backends, databases, message brokers and queues, and anything else that can be communicated with over a network.
+
+With Artillery, you can create test scripts that can test common workflows for GraphQL to smoke out any potential performance issues that can creep up when you least expect. Running regular load tests on your APIs both during development and against your production servers will keep your APIs performant and resilient for your customers. This article shows you how to use Artillery to keep your GraphQL services in check. Learn more at [Artillery Website](https://www.artillery.io/docs)
+
+
+```sh
+  npm i artillery@2.0.22
+```
+
+
+### Prometheus Pushgateway
+
+The Prometheus Pushgateway exists to allow ephemeral and batch jobs to expose their metrics to Prometheus. 
+Since these kinds of jobs may not exist long enough to be scraped, they can instead push their metrics to a Pushgateway. The Pushgateway then exposes these metrics to Prometheus. 
+
+In our specific example, we use the Pushgateway to export the Artillery Test metrics to the Prometheus instance deployed as part of HTS (or to your existing Prometheus environment) and use these metrics to create charts. Learn more at [Prometheus Pushgateway Github](https://github.com/prometheus/pushgateway)
+
+You can deploy the Pushgateway using the prom/pushgateway Docker image.
+
+
+```sh
+  docker pull prom/pushgateway
+  
+  docker run -d -p 9091:9091 prom/pushgateway
+```
+
+### Grafana
+
+Grafana is a multi-platform open source analytics and interactive visualization web application. It can produce charts, graphs, and alerts for the web when connected to supported data sources. Learn more at [Grafana Docs](https://grafana.com/docs/grafana/latest/)
+
+
+## Modes of Deployment
+- Docker Compose on a Web Server: Deploy using a Docker Compose file.
+- Local Execution Without Configuration: Run the tests using artillery cli.
+
+### As a Github Action
+
+- Clone the Repository and Push to Your Own Repository
+
+  ``` https://github.com/hasura/postsales/tree/main/Tools/hasura-performance-test-suite/actions-config ```
+
+- The workflow file is located under /hasura-test-suite/DDN/action/.github/workflows
+
+- Configure the secrets as github secrets
+
+- You can run the test by passing the input parameteres.
+
+
+  ```Note: You can modify the configuration to accept other headers ( if any ) and It is adivisable to use custom runner for your tests ```
+
+
+
+
+## Executing Tests
+
+### Load Testing
 
 1. Clone Repository: Clone this repository to your local machine.
 
@@ -59,7 +138,8 @@
 
 6. Update the env variables, each explained below
   - `GRAPHQL_ENDPOINT`: The GraphQL endpoint for your Hasura Instance
-  - `HASURA_CLOUD_PAT`:  Value of HASURA_CLOUD_PAT
+  - `X_HASURA_DDN_TOKEN`:  Value of x-hasura-ddn-token
+  - `AUTH_TOKEN`: Value of authentication token
   - `TEST_DURATION`: Test duration in seconds (or Xh to set in hours)
   - `STARTING_ARRIVAL_RATE`: Starting calls per second value.
   - `ENDING_ARRIVAL_RATE`: At the end of your test duration, this will be your calls per second.
@@ -75,7 +155,7 @@
 8. Checkout the metrics & dashboards on Grafana
 
 
-## Functional Testing
+### Functional Testing
 
 
 1. Clone Repository: Clone this repository to your local machine.
@@ -148,7 +228,8 @@
 
 4. Update the env variables, each explained below
   - `GRAPHQL_ENDPOINT`: The GraphQL endpoint for your Hasura Instance
-  - `HASURA_CLOUD_PAT`:  Value of HASURA_CLOUD_PAT
+  - `X_HASURA_DDN_TOKEN`:  Value of x-hasura-ddn-token
+  - `AUTH_TOKEN`: Value of authentication token
   - `TEST_DURATION`: Test duration in seconds (or Xh to set in hours)
   - `STARTING_ARRIVAL_RATE`: Starting calls per second value.
   - `ENDING_ARRIVAL_RATE`: At the end of your test duration, this will be your calls per second.
@@ -171,7 +252,7 @@
 
 ## Local Execution Without Configuration:
 
- 1. Install Artillery: ```npm install -g artillery@latest```
+ 1. Install Artillery: ```npm install -g artillery@2.0.14```
   2. Create a test.yaml file with your test configurations.
 
 ```
@@ -179,7 +260,8 @@ config:
   target: <GRAPHQL_ENDPOINT>
   defaults:
       headers:
-        x-hasura-admin-secret: <ADMIN_SECRET>
+        x-hasura-ddn-token: ${DDN_TOKEN}
+        Auth-Token: ${AuthTOKEN}
         # add additional header (if any)
   phases:
     - duration: 60

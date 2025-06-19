@@ -1,10 +1,12 @@
 # Hasura Test Suite (HTS) Documentation
 
+
 ## 1. About HTS
 
 Hasura Test Suite (HTS) is an open source tool built around the Artillery open source framework. We have optimized this to work better with Hasura V2, being able to use this tool as your single source to perform both functional validations and performance testing of any Hasura deployment. HTS supports both self-hosted and Hasura cloud deployments of Hasura. DDN support is coming next week.
 
 ### 1.1. Overview
+
 
 ### 1.2. Components
 
@@ -87,6 +89,10 @@ Deploy using docker-compose
 
   ``` https://github.com/hasura/postsales/tree/main/Tools/hasura-performance-test-suite/actions-config ```
 
+- The workflow file is located under /hasura-test-suite/DDN/action/.github/workflows
+
+- Configure the secrets as github secrets
+
 - Configure the GraphQL Endpoint and Hasura Admin Secret
 
   ```json
@@ -96,9 +102,7 @@ Deploy using docker-compose
   }
   ```
 
-  ```Note: You can modify the configuration to accept other headers ( if any ) and, Also can pass the admin secret as an input parameter in action workflow using the file```
-
-```Note: It is adivisable to use custom runner for your tests```
+   ```Note: You can modify the configuration to accept other headers ( if any ) and It is adivisable to use custom runner for your tests ```
 
 
 ## 3. Creating your first functional/Load test
@@ -374,5 +378,3 @@ Note: Queries can be looped and mutations can be tested using the [UI-CLI](https
 
 ## 7. Roadmap
 
-
-## 8. Feedback
