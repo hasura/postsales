@@ -56,7 +56,7 @@ Grafana is a multi-platform open source analytics and interactive visualization 
 
 
 ## Modes of Deployment
-- Docker Compose on a Web Server: Deploy using a Docker Compose file.
+- Github Action
 - Local Execution Without Configuration: Run the tests using artillery cli.
 
 ### As a Github Action
