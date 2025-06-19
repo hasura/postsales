@@ -2,7 +2,8 @@ overwrite: true
 schema: 
   - "${GRAPHQL_ENDPOINT}/graphql":
       headers:
-        hasura_cloud_pat: ${HASURA_CLOUD_PAT}
+        x-hasura-ddn-token: ${DDN_TOKEN}
+        Auth-Token: ${AuthTOKEN}
 # documents:
 #   - ../queries/**/*.{gql,graphql}
 generates:

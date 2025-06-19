@@ -18,7 +18,7 @@
 
 ## About HTS
 
-Hasura Test Suite (HTS) is an open source tool built around the Artillery open source framework. We have optimized this to work better with Hasura V2, being able to use this tool as your single source to perform both functional validations and performance testing of any Hasura deployment. HTS supports both self-hosted and Hasura cloud deployments of Hasura. DDN support is coming next week.
+Hasura Test Suite (HTS) is an open source tool built around the Artillery open source framework. Being able to use this tool as your single source to perform both functional validations and performance testing of any Hasura deployment. HTS supports both self-hosted and Hasura cloud deployments of Hasura. 
 
 
 ## Components
@@ -58,6 +58,24 @@ Grafana is a multi-platform open source analytics and interactive visualization 
 ## Modes of Deployment
 - Docker Compose on a Web Server: Deploy using a Docker Compose file.
 - Local Execution Without Configuration: Run the tests using artillery cli.
+
+### As a Github Action
+
+- Clone the Repository and Push to Your Own Repository
+
+  ``` https://github.com/hasura/postsales/tree/main/Tools/hasura-performance-test-suite/actions-config ```
+
+- The workflow file is located under /hasura-test-suite/DDN/action/.github/workflows
+
+- Configure the secrets as github secrets
+
+- You can run the test by passing the input parameteres.
+
+
+  ```Note: You can modify the configuration to accept other headers ( if any ) and It is adivisable to use custom runner for your tests ```
+
+
+
 
 ## Executing Tests
 
@@ -120,7 +138,8 @@ Grafana is a multi-platform open source analytics and interactive visualization 
 
 6. Update the env variables, each explained below
   - `GRAPHQL_ENDPOINT`: The GraphQL endpoint for your Hasura Instance
-  - `HASURA_CLOUD_PAT`:  Value of HASURA_CLOUD_PAT
+  - `X_HASURA_DDN_TOKEN`:  Value of x-hasura-ddn-token
+  - `AUTH_TOKEN`: Value of authentication token
   - `TEST_DURATION`: Test duration in seconds (or Xh to set in hours)
   - `STARTING_ARRIVAL_RATE`: Starting calls per second value.
   - `ENDING_ARRIVAL_RATE`: At the end of your test duration, this will be your calls per second.
@@ -209,7 +228,8 @@ Grafana is a multi-platform open source analytics and interactive visualization 
 
 4. Update the env variables, each explained below
   - `GRAPHQL_ENDPOINT`: The GraphQL endpoint for your Hasura Instance
-  - `HASURA_CLOUD_PAT`:  Value of HASURA_CLOUD_PAT
+  - `X_HASURA_DDN_TOKEN`:  Value of x-hasura-ddn-token
+  - `AUTH_TOKEN`: Value of authentication token
   - `TEST_DURATION`: Test duration in seconds (or Xh to set in hours)
   - `STARTING_ARRIVAL_RATE`: Starting calls per second value.
   - `ENDING_ARRIVAL_RATE`: At the end of your test duration, this will be your calls per second.
@@ -232,7 +252,7 @@ Grafana is a multi-platform open source analytics and interactive visualization 
 
 ## Local Execution Without Configuration:
 
- 1. Install Artillery: ```npm install -g artillery@latest```
+ 1. Install Artillery: ```npm install -g artillery@2.0.14```
   2. Create a test.yaml file with your test configurations.
 
 ```
@@ -240,7 +260,8 @@ config:
   target: <GRAPHQL_ENDPOINT>
   defaults:
       headers:
-        x-hasura-admin-secret: <ADMIN_SECRET>
+        x-hasura-ddn-token: ${DDN_TOKEN}
+        Auth-Token: ${AuthTOKEN}
         # add additional header (if any)
   phases:
     - duration: 60

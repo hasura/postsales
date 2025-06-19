@@ -158,6 +158,11 @@ expect.failed.{type} - count of failed expectations of {type}, for example: expe
 This will create a test-run-report.json.html file in the current directory which you can open in a browser.
 
 
+#### 3.4.1 Grafana Dashboards
+
+Grafana dashboards can be found here
+
+
 ## References:
 1. https://www.artillery.io/docs/get-started/get-artillery
 2. https://www.artillery.io/docs/get-started/first-test
