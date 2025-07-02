@@ -79,6 +79,8 @@ Grafana is a multi-platform open source analytics and interactive visualization 
 
 ## Executing Tests
 
+> Note: for running load or functional tests, the auth parameters need to be properly specified. The configs in this directory assume a publicly accessible GraphQL API with a JWT token passed as a custom `Auth-token` header. You will need to modify the `artilleryTest.yaml` and `functionalTest.yaml` headers, as well as the `.env` variables depending on your auth config. If the API expects a Bearer token, replace the `Auth-token` header with `Authorization` and pass as a Bearer token. If the API endpoint is private, set the `X-Hasura-DDN-Token` header.
+
 ### Load Testing
 
 1. Clone Repository: Clone this repository to your local machine.
@@ -240,9 +242,9 @@ Grafana is a multi-platform open source analytics and interactive visualization 
 
 5. Run the test
 ```sh
-  artillery run --config funtionalTest.yaml <file_name.yaml>
+  artillery run --config funtionalTest.yaml <file_name.yaml> --dotenv=.env
 ```
-`example: artillery run --config funtionalTest.yaml functionalTest/validations.yaml`
+`example: artillery run --config funtionalTest.yaml functionalTest/validations.yaml --dotenv=.env`
 
 
 6. Checkout the metrics & dashboards on Grafana
