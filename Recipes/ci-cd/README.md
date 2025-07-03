@@ -17,13 +17,13 @@ This document will focus on creating builds for metadata as well as connector in
 
 A typical context (located in `.hasura/context.yaml`) would look like (in case if you have performed `ddn project init` )
 
-```json
-   prod:
-     project: myproject-prod
-     supergraph: ../supergraph.yaml
-     subgraph: ../app/subgraph.yaml
-     localEnvFile: ../.env.cloud
-     cloudEnvFile: ../.env.prod
+```yaml
+prod:
+  project: myproject-prod
+  supergraph: ../supergraph.yaml
+  subgraph: ../app/subgraph.yaml
+  localEnvFile: ../.env.cloud
+  cloudEnvFile: ../.env.prod
 ```
 
 We can create multiple contexts per environment. You can read more in detail about managing contexts over [here](https://hasura.io/docs/3.0/project-configuration/project-management/manage-contexts).
@@ -47,13 +47,13 @@ If you have different supergraph(s) files for specific environments, please do m
 
 For now we’ll create a context `cloud` which emphasizes the cloud environment. Copy the project name which would have been created (can be found under `default` context) when you had performed `ddn project init` .
 
-```
-   cloud:
-     project: <project_name>
-     supergraph: ../supergraph.yaml
-     subgraph: ../app/subgraph.yaml
-     localEnvFile: ../.env.cloud
-     cloudEnvFile: ../.env.prod
+```yaml
+cloud:
+  project: <project_name>
+  supergraph: ../supergraph.yaml
+  subgraph: ../app/subgraph.yaml
+  localEnvFile: ../.env.cloud
+  cloudEnvFile: ../.env.prod
 ```
 
 Here’s how my context file would look like with multiple environments  
@@ -142,13 +142,13 @@ We will create necessary workflow files for github actions
 
 First checkout to development branch
 
-```
+```shell
 git checkout development
 ```
 
 Open terminal/bash in root of your DDN project directory and perform the following:
 
-```
+```shell
 mkdir -p .github/workflows
 touch .github/workflows/build-and-apply.yaml
 touch .github/workflows/only-build.yaml
@@ -158,256 +158,253 @@ Open VS code editor , and modify the files below with the code we’ve given.
 
 only-build.yaml
 
-```xml
+```yaml
 name: DDN supergraph build workflow
 
 on:
- # Trigger on pull request merge to "cloud" or other branches you want
- pull_request:
-   types: [closed]
-   branches:
-     - cloud
+  # Trigger on pull request merge to "cloud" or other branches you want
+  pull_request:
+    types: [closed]
+    branches:
+      - cloud
 
 jobs:
- deploy:
-   # Run only when PR is merged (not when it's just closed without merging)
-   if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && (github.base_ref == 'cloud'))
-   runs-on: ubuntu-latest
-   steps:
-     - name: Checkout code
-       uses: actions/checkout@v3
+  deploy:
+    # Run only when PR is merged (not when it's just closed without merging)
+    if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && (github.base_ref == 'cloud'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-     - name: Install DDN CLI
-       run: |
-         curl -L https://graphql-engine-cdn.hasura.io/ddn/cli/v4/get.sh | bash
+      - name: Install DDN CLI
+        run: |
+          curl -L https://graphql-engine-cdn.hasura.io/ddn/cli/v4/get.sh | bash
 
-     - name: Determine branch name
-       id: branch-name
-       run: |
-         if [ "${{ github.event_name }}" = "pull_request" ]; then
-           BRANCH_NAME="${{ github.base_ref }}"
-         else
-           BRANCH_NAME="${{ github.event.inputs.environment }}"
-         fi
-         echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-         echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+      - name: Determine branch name
+        id: branch-name
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BRANCH_NAME="${{ github.base_ref }}"
+          else
+            BRANCH_NAME="${{ github.event.inputs.environment }}"
+          fi
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
-     - name: Create branch-specific env file from secret and Login to DDN CLI for cloud
-       if: env.BRANCH_NAME != 'main'
-       run: |
-         echo "Creating ${{ env.BRANCH_NAME }} file"
-         # Create .env file for
-         touch .env.${{ env.BRANCH_NAME }}
+      - name: Create branch-specific env file from secret and Login to DDN CLI for cloud
+        if: env.BRANCH_NAME != 'main'
+        run: |
+          echo "Creating ${{ env.BRANCH_NAME }} file"
+          # Create .env file for
+          touch .env.${{ env.BRANCH_NAME }}
 
-         # Write secret to .env.{branch} file
-         cat << EOF > .env.${{ env.BRANCH_NAME }}
-         ${{ secrets[format('DDN_ENV_{0}',env.BRANCH_NAME)] }}
-         EOF
+          # Write secret to .env.{branch} file
+          cat << EOF > .env.${{ env.BRANCH_NAME }}
+          ${{ secrets[format('DDN_ENV_{0}',env.BRANCH_NAME)] }}
+          EOF
 
-         # Make sure the file is readable but secure
-         chmod 600 .env.${{ env.BRANCH_NAME }}
+          # Make sure the file is readable but secure
+          chmod 600 .env.${{ env.BRANCH_NAME }}
 
-         echo "Performing login via DDN CLI ..."
-         ddn auth login --access-token ${{ secrets[format('DDN_SERVICE_ACCOUNT_ACCESS_TOKEN_{0}', env.BRANCH_NAME)] }}
+          echo "Performing login via DDN CLI ..."
+          ddn auth login --access-token ${{ secrets[format('DDN_SERVICE_ACCOUNT_ACCESS_TOKEN_{0}', env.BRANCH_NAME)] }}
 
-     - name: Set Context to Current Branch
-       run: |
-         echo "Setting context to ${{ env.BRANCH_NAME }}"
-         ddn context set-current-context ${{ env.BRANCH_NAME }}
+      - name: Set Context to Current Branch
+        run: |
+          echo "Setting context to ${{ env.BRANCH_NAME }}"
+          ddn context set-current-context ${{ env.BRANCH_NAME }}
 
-     - name: Check if subgraph exists or not for current env/context and create one if it's missing
-       run: |
-         # Create an array to store missing subgraphs
-         missing_subgraphs=()
+      - name: Check if subgraph exists or not for current env/context and create one if it's missing
+        run: |
+          # Create an array to store missing subgraphs
+          missing_subgraphs=()
 
-         # Extract subgraph paths from supergraph.one.yaml
-         echo "Extracting subgraphs from supergraph.one.yaml..."
-         config_subgraphs=()
+          # Extract subgraph paths from supergraph.one.yaml
+          echo "Extracting subgraphs from supergraph.one.yaml..."
+          config_subgraphs=()
 
-         while IFS= read -r line; do
+          while IFS= read -r line; do
 
-           # Skip commented lines and extract only valid paths
-           if [[ $line =~ ^[[:space:]]*-[[:space:]]*([^#]+) ]]; then
+            # Skip commented lines and extract only valid paths
+            if [[ $line =~ ^[[:space:]]*-[[:space:]]*([^#]+) ]]; then
 
-             # Extract the path and trim whitespace
-             path="${BASH_REMATCH[1]}"
-             path=$(echo "$path" | xargs)
+              # Extract the path and trim whitespace
+              path="${BASH_REMATCH[1]}"
+              path=$(echo "$path" | xargs)
 
-             # Extract just the directory name (e.g., "globals" from "globals/subgraph.yaml")
-             subgraph_name=$(echo "$path" | cut -d'/' -f1)
-             config_subgraphs+=("$subgraph_name")
-             echo "Found subgraph in config: $subgraph_name"
-           fi
-         done < <(grep -A 100 "subgraphs:" supergraph.one.yaml | grep -v "^kind\|^version\|^definition\|^subgraphs:")
+              # Extract just the directory name (e.g., "globals" from "globals/subgraph.yaml")
+              subgraph_name=$(echo "$path" | cut -d'/' -f1)
+              config_subgraphs+=("$subgraph_name")
+              echo "Found subgraph in config: $subgraph_name"
+            fi
+          done < <(grep -A 100 "subgraphs:" supergraph.one.yaml | grep -v "^kind\|^version\|^definition\|^subgraphs:")
 
-         # Get current project from context
-         echo "Getting current project from context..."
-         context_output=$(ddn context get-current-context --out json)
-         project_value=$(echo "$context_output" | jq -r '.values.project')
-         echo "Current project: $project_value"
+          # Get current project from context
+          echo "Getting current project from context..."
+          context_output=$(ddn context get-current-context --out json)
+          project_value=$(echo "$context_output" | jq -r '.values.project')
+          echo "Current project: $project_value"
 
-         # Get existing subgraphs from project
-         echo "Getting existing subgraphs from project..."
-         existing_subgraphs_output=$(ddn project subgraph get --project "$project_value" --out json)
+          # Get existing subgraphs from project
+          echo "Getting existing subgraphs from project..."
+          existing_subgraphs_output=$(ddn project subgraph get --project "$project_value" --out json)
 
-         # Check which subgraphs are missing
-         echo "Checking for missing subgraphs..."
-         for subgraph in "${config_subgraphs[@]}"; do
-           exists=$(echo "$existing_subgraphs_output" | jq -r ".[] | select(.name == \"$subgraph\") | .name")
-           if [[ -z "$exists" ]]; then
-             echo "Subgraph '$subgraph' is missing in the project"
-             missing_subgraphs+=("$subgraph")
-           else
-             echo "Subgraph '$subgraph' already exists"
-           fi
-         done
+          # Check which subgraphs are missing
+          echo "Checking for missing subgraphs..."
+          for subgraph in "${config_subgraphs[@]}"; do
+            exists=$(echo "$existing_subgraphs_output" | jq -r ".[] | select(.name == \"$subgraph\") | .name")
+            if [[ -z "$exists" ]]; then
+              echo "Subgraph '$subgraph' is missing in the project"
+              missing_subgraphs+=("$subgraph")
+            else
+              echo "Subgraph '$subgraph' already exists"
+            fi
+          done
 
-         # Create missing subgraphs
-         if [[ ${#missing_subgraphs[@]} -eq 0 ]]; then
-           echo "No missing subgraphs to create"
-         else
-           echo "Creating missing subgraphs..."
-           for subgraph in "${missing_subgraphs[@]}"; do
-             echo "Creating subgraph '$subgraph'..."
-             ddn project subgraph create "$subgraph" --project "$project_value"
-           done
-         fi
+          # Create missing subgraphs
+          if [[ ${#missing_subgraphs[@]} -eq 0 ]]; then
+            echo "No missing subgraphs to create"
+          else
+            echo "Creating missing subgraphs..."
+            for subgraph in "${missing_subgraphs[@]}"; do
+              echo "Creating subgraph '$subgraph'..."
+              ddn project subgraph create "$subgraph" --project "$project_value"
+            done
+          fi
 
-     - name: Create supergraph build
-       run: |
-         # Create the supergraph build and you can apply manually later via CLI or UI
-         ddn supergraph build create
-
+      - name: Create supergraph build
+        run: |
+          # Create the supergraph build and you can apply manually later via CLI or UI
+          ddn supergraph build create
 ```
 
 build-and-apply.yaml
 
-```xml
+```yaml
 name: DDN supergraph build and apply workflow
 
 on:
- # Trigger on pull request merge to "cloud" or other branches you want
- pull_request:
-   types: [closed]
-   branches:
-     - cloud
+  # Trigger on pull request merge to "cloud" or other branches you want
+  pull_request:
+    types: [closed]
+    branches:
+      - cloud
 
 jobs:
- deploy:
-   # Run only when PR is merged (not when it's just closed without merging)
-   if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && (github.base_ref == 'cloud'))
-   runs-on: ubuntu-latest
-   steps:
-     - name: Checkout code
-       uses: actions/checkout@v3
+  deploy:
+    # Run only when PR is merged (not when it's just closed without merging)
+    if: (github.event_name == 'pull_request' && github.event.pull_request.merged == true && (github.base_ref == 'cloud'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-     - name: Install DDN CLI
-       run: |
-         curl -L https://graphql-engine-cdn.hasura.io/ddn/cli/v4/get.sh | bash
+      - name: Install DDN CLI
+        run: |
+          curl -L https://graphql-engine-cdn.hasura.io/ddn/cli/v4/get.sh | bash
 
-     - name: Determine branch name
-       id: branch-name
-       run: |
-         if [ "${{ github.event_name }}" = "pull_request" ]; then
-           BRANCH_NAME="${{ github.base_ref }}"
-         else
-           BRANCH_NAME="${{ github.event.inputs.environment }}"
-         fi
-         echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
-         echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+      - name: Determine branch name
+        id: branch-name
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BRANCH_NAME="${{ github.base_ref }}"
+          else
+            BRANCH_NAME="${{ github.event.inputs.environment }}"
+          fi
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
-     - name: Create branch-specific env file from secret and Login to DDN CLI for cloud
-       if: env.BRANCH_NAME != 'main'
-       run: |
-         echo "Creating ${{ env.BRANCH_NAME }} file"
-         # Create .env file for
-         touch .env.${{ env.BRANCH_NAME }}
+      - name: Create branch-specific env file from secret and Login to DDN CLI for cloud
+        if: env.BRANCH_NAME != 'main'
+        run: |
+          echo "Creating ${{ env.BRANCH_NAME }} file"
+          # Create .env file for
+          touch .env.${{ env.BRANCH_NAME }}
 
-         # Write secret to .env.{branch} file
-         cat << EOF > .env.${{ env.BRANCH_NAME }}
-         ${{ secrets[format('DDN_ENV_{0}',env.BRANCH_NAME)] }}
-         EOF
+          # Write secret to .env.{branch} file
+          cat << EOF > .env.${{ env.BRANCH_NAME }}
+          ${{ secrets[format('DDN_ENV_{0}',env.BRANCH_NAME)] }}
+          EOF
 
-         # Make sure the file is readable but secure
-         chmod 600 .env.${{ env.BRANCH_NAME }}
+          # Make sure the file is readable but secure
+          chmod 600 .env.${{ env.BRANCH_NAME }}
 
-         echo "Performing login via DDN CLI ..."
-         ddn auth login --access-token ${{ secrets[format('DDN_SERVICE_ACCOUNT_ACCESS_TOKEN_{0}', env.BRANCH_NAME)] }}
+          echo "Performing login via DDN CLI ..."
+          ddn auth login --access-token ${{ secrets[format('DDN_SERVICE_ACCOUNT_ACCESS_TOKEN_{0}', env.BRANCH_NAME)] }}
 
-     - name: Set Context to Current Branch
-       run: |
-         echo "Setting context to ${{ env.BRANCH_NAME }}"
-         ddn context set-current-context ${{ env.BRANCH_NAME }}
+      - name: Set Context to Current Branch
+        run: |
+          echo "Setting context to ${{ env.BRANCH_NAME }}"
+          ddn context set-current-context ${{ env.BRANCH_NAME }}
 
-     - name: Check if subgraph exists or not for current env/context and create one if it's missing
-       run: |
-         # Create an array to store missing subgraphs
-         missing_subgraphs=()
+      - name: Check if subgraph exists or not for current env/context and create one if it's missing
+        run: |
+          # Create an array to store missing subgraphs
+          missing_subgraphs=()
 
-         # Extract subgraph paths from supergraph.one.yaml
-         echo "Extracting subgraphs from supergraph.one.yaml..."
-         config_subgraphs=()
+          # Extract subgraph paths from supergraph.one.yaml
+          echo "Extracting subgraphs from supergraph.one.yaml..."
+          config_subgraphs=()
 
-         while IFS= read -r line; do
+          while IFS= read -r line; do
 
-           # Skip commented lines and extract only valid paths
-           if [[ $line =~ ^[[:space:]]*-[[:space:]]*([^#]+) ]]; then
+            # Skip commented lines and extract only valid paths
+            if [[ $line =~ ^[[:space:]]*-[[:space:]]*([^#]+) ]]; then
 
-             # Extract the path and trim whitespace
-             path="${BASH_REMATCH[1]}"
-             path=$(echo "$path" | xargs)
+              # Extract the path and trim whitespace
+              path="${BASH_REMATCH[1]}"
+              path=$(echo "$path" | xargs)
 
-             # Extract just the directory name (e.g., "globals" from "globals/subgraph.yaml")
-             subgraph_name=$(echo "$path" | cut -d'/' -f1)
-             config_subgraphs+=("$subgraph_name")
-             echo "Found subgraph in config: $subgraph_name"
-           fi
-         done < <(grep -A 100 "subgraphs:" supergraph.one.yaml | grep -v "^kind\|^version\|^definition\|^subgraphs:")
+              # Extract just the directory name (e.g., "globals" from "globals/subgraph.yaml")
+              subgraph_name=$(echo "$path" | cut -d'/' -f1)
+              config_subgraphs+=("$subgraph_name")
+              echo "Found subgraph in config: $subgraph_name"
+            fi
+          done < <(grep -A 100 "subgraphs:" supergraph.one.yaml | grep -v "^kind\|^version\|^definition\|^subgraphs:")
 
-         # Get current project from context
-         echo "Getting current project from context..."
-         context_output=$(ddn context get-current-context --out json)
-         project_value=$(echo "$context_output" | jq -r '.values.project')
-         echo "Current project: $project_value"
+          # Get current project from context
+          echo "Getting current project from context..."
+          context_output=$(ddn context get-current-context --out json)
+          project_value=$(echo "$context_output" | jq -r '.values.project')
+          echo "Current project: $project_value"
 
-         # Get existing subgraphs from project
-         echo "Getting existing subgraphs from project..."
-         existing_subgraphs_output=$(ddn project subgraph get --project "$project_value" --out json)
+          # Get existing subgraphs from project
+          echo "Getting existing subgraphs from project..."
+          existing_subgraphs_output=$(ddn project subgraph get --project "$project_value" --out json)
 
-         # Check which subgraphs are missing
-         echo "Checking for missing subgraphs..."
-         for subgraph in "${config_subgraphs[@]}"; do
-           exists=$(echo "$existing_subgraphs_output" | jq -r ".[] | select(.name == \"$subgraph\") | .name")
-           if [[ -z "$exists" ]]; then
-             echo "Subgraph '$subgraph' is missing in the project"
-             missing_subgraphs+=("$subgraph")
-           else
-             echo "Subgraph '$subgraph' already exists"
-           fi
-         done
+          # Check which subgraphs are missing
+          echo "Checking for missing subgraphs..."
+          for subgraph in "${config_subgraphs[@]}"; do
+            exists=$(echo "$existing_subgraphs_output" | jq -r ".[] | select(.name == \"$subgraph\") | .name")
+            if [[ -z "$exists" ]]; then
+              echo "Subgraph '$subgraph' is missing in the project"
+              missing_subgraphs+=("$subgraph")
+            else
+              echo "Subgraph '$subgraph' already exists"
+            fi
+          done
 
-         # Create missing subgraphs
-         if [[ ${#missing_subgraphs[@]} -eq 0 ]]; then
-           echo "No missing subgraphs to create"
-         else
-           echo "Creating missing subgraphs..."
-           for subgraph in "${missing_subgraphs[@]}"; do
-             echo "Creating subgraph '$subgraph'..."
-             ddn project subgraph create "$subgraph" --project "$project_value"
-           done
-         fi
+          # Create missing subgraphs
+          if [[ ${#missing_subgraphs[@]} -eq 0 ]]; then
+            echo "No missing subgraphs to create"
+          else
+            echo "Creating missing subgraphs..."
+            for subgraph in "${missing_subgraphs[@]}"; do
+              echo "Creating subgraph '$subgraph'..."
+              ddn project subgraph create "$subgraph" --project "$project_value"
+            done
+          fi
 
-     - name: Create supergraph build
-       run: |
-         # Create the supergraph build and you can apply manually later via CLI or UI
-         ddn supergraph build create --apply
-
-
+      - name: Create supergraph build
+        run: |
+          # Create the supergraph build and you can apply manually later via CLI or UI
+          ddn supergraph build create --apply
 ```
 
 Push the changes to development branch
 
-```
+```shell
 git add .
 git commit -m "add: added workflow files"
 git push -u origin development
