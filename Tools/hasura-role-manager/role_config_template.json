@@ -1,0 +1,20 @@
+{
+  "role_name": "example_role",
+  "permissions": [
+    {
+      "model": "ChinookAlbum",
+      "fields": ["albumid", "title"],
+      "filter": "null"
+    },
+    {
+      "model": "ChinookArtist", 
+      "fields": ["artistid", "name"],
+      "filter": "null"
+    },
+    {
+      "model": "ChinookCustomer",
+      "fields": ["customerid", "firstname", "lastname", "email"],
+      "filter": "{\"customerid\": {\"_eq\": \"x-hasura-user-id\"}}"
+    }
+  ]
+}

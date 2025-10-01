@@ -1,0 +1,25 @@
+{
+  "role_name": "sales_team",
+  "permissions": [
+    {
+      "model": "ChinookCustomer",
+      "fields": ["customerid", "firstname", "lastname", "email", "company", "country"],
+      "filter": "null"
+    },
+    {
+      "model": "ChinookInvoice",
+      "fields": ["invoiceid", "customerid", "invoicedate", "total"],
+      "filter": "null"
+    },
+    {
+      "model": "ChinookAlbum",
+      "fields": ["albumid", "title"],
+      "filter": "null"
+    },
+    {
+      "model": "ChinookArtist",
+      "fields": ["artistid", "name"],
+      "filter": "null"
+    }
+  ]
+}

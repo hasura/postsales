@@ -1,0 +1,20 @@
+{
+  "role_name": "customer_portal",
+  "permissions": [
+    {
+      "model": "ChinookCustomer",
+      "fields": ["customerid", "firstname", "lastname", "email", "company"],
+      "filter": "{\"customerid\": {\"_eq\": \"x-hasura-user-id\"}}"
+    },
+    {
+      "model": "ChinookInvoice",
+      "fields": ["invoiceid", "customerid", "invoicedate", "total"],
+      "filter": "{\"customerid\": {\"_eq\": \"x-hasura-user-id\"}}"
+    },
+    {
+      "model": "ChinookAlbum",
+      "fields": ["albumid", "title"],
+      "filter": "null"
+    }
+  ]
+}

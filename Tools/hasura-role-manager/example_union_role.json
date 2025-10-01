@@ -1,0 +1,30 @@
+{
+  "role_name": "customer_readonly",
+  "permissions": [
+    {
+      "model": "ChinookAlbum",
+      "fields": ["albumid", "artistid", "title"],
+      "filter": "null"
+    },
+    {
+      "model": "ChinookArtist",
+      "fields": ["artistid", "name"],
+      "filter": "null"
+    },
+    {
+      "model": "ChinookCustomer",
+      "fields": ["address", "city", "company", "country", "customerid", "email", "fax", "firstname", "lastname", "phone", "postalcode", "state", "supportrepid"],
+      "filter": "null"
+    },
+    {
+      "model": "ChinookInvoice",
+      "fields": ["billingaddress", "billingcity", "billingcountry", "billingpostalcode", "billingstate", "customerid", "invoicedate", "invoiceid", "total"],
+      "filter": "null"
+    },
+    {
+      "model": "ChinookInvoiceline",
+      "fields": ["invoiceid", "invoicelineid", "quantity", "trackid", "unitprice"],
+      "filter": "null"
+    }
+  ]
+}
