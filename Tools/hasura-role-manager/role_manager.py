@@ -8,6 +8,8 @@ Supports creating roles as unions of existing roles.
 import os
 import yaml
 import json
+import shutil
+from datetime import datetime
 from typing import Dict, List, Set, Optional, Union
 from pathlib import Path
 import argparse
@@ -434,6 +436,68 @@ class HasuraRoleManager:
         with open(filename, 'r') as f:
             return json.load(f)
 
+def create_metadata_backup(metadata_path: str) -> str:
+    """
+    Create a timestamped backup of the metadata directory in a dedicated backups folder
+    
+    Args:
+        metadata_path: Path to the metadata directory (e.g., "../app/metadata")
+        
+    Returns:
+        str: Path to the created backup directory
+    """
+    # Generate timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    # Smart backup directory naming
+    metadata_path_obj = Path(metadata_path).resolve()
+    
+    # Extract parent and directory name
+    # ../app/metadata -> app_metadata_backup_20241006_175147
+    parent_name = metadata_path_obj.parent.name
+    dir_name = metadata_path_obj.name
+    backup_name = f"{parent_name}_{dir_name}_backup_{timestamp}"
+    
+    # Create backups directory in current working directory
+    backups_dir = Path.cwd() / "backups"
+    backups_dir.mkdir(exist_ok=True)
+    backup_path = backups_dir / backup_name
+    
+    print(f"[BACKUP] Creating backup: backups/{backup_name}")
+    
+    try:
+        # Copy entire metadata directory
+        shutil.copytree(metadata_path, backup_path)
+        print(f"[OK] Backup created: backups/{backup_name}")
+        
+        # Create rollback instructions file
+        rollback_file = backups_dir / f"{backup_name}_ROLLBACK.txt"
+        with open(rollback_file, 'w') as f:
+            f.write(f"HASURA DDN ROLE MANAGER - ROLLBACK INSTRUCTIONS\n")
+            f.write(f"=" * 50 + "\n\n")
+            f.write(f"Backup created: {datetime.now()}\n")
+            f.write(f"Original path: {metadata_path}\n")
+            f.write(f"Backup path: backups/{backup_name}\n\n")
+            f.write(f"ROLLBACK COMMANDS:\n")
+            f.write(f"-" * 20 + "\n\n")
+            f.write(f"Linux/macOS:\n")
+            f.write(f"  rm -rf {metadata_path}\n")
+            f.write(f"  mv backups/{backup_name} {metadata_path}\n\n")
+            f.write(f"Windows:\n")
+            f.write(f"  rmdir /S /Q {metadata_path}\n")
+            f.write(f"  move backups\\{backup_name} {metadata_path}\n\n")
+            f.write(f"VERIFICATION:\n")
+            f.write(f"-" * 15 + "\n")
+            f.write(f"After rollback, verify with:\n")
+            f.write(f"  python role_manager.py --metadata-path {metadata_path} --list-roles\n")
+        
+        print(f"[INFO] Rollback instructions: backups/{rollback_file.name}")
+        return str(backup_path)
+        
+    except Exception as e:
+        print(f"[ERROR] Backup failed: {e}")
+        return ""
+
 def main():
     parser = argparse.ArgumentParser(description='Hasura DDN Role Management')
     parser.add_argument('--metadata-path', default='../app/metadata',
@@ -452,10 +516,28 @@ def main():
                        help='Create role as union of existing roles: --create-union new_role_name base_role1 base_role2 ...')
     parser.add_argument('--remove-role', type=str, metavar='ROLE_NAME',
                        help='Remove a role from all HML files (cannot remove admin/Admin roles)')
+    parser.add_argument('--no-backup', action='store_true',
+                       help='Skip creating backup before making changes (not recommended)')
     
     args = parser.parse_args()
     
     manager = HasuraRoleManager(args.metadata_path)
+    
+    # Create backup by default for destructive operations (unless --no-backup is used)
+    destructive_operations = (args.create_predefined or args.apply_config or
+                             args.create_union or args.remove_role or args.interactive)
+
+    if destructive_operations and not args.no_backup:
+        print("[BACKUP] Creating automatic backup before making changes...")
+        backup_path = create_metadata_backup(args.metadata_path)
+        if not backup_path:
+            print("[ERROR] Backup failed! Use --no-backup to proceed anyway (not recommended).")
+            print("        Or fix the backup issue and try again.")
+            return
+        print()  # Add spacing after backup messages
+    elif destructive_operations and args.no_backup:
+        print("[WARNING] Proceeding without backup (--no-backup flag used)")
+        print()
     
     if args.list_models:
         manager.list_models()
