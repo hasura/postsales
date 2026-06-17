@@ -1,7 +1,7 @@
 # This Dockerfile builds the React client and API together
 
 # Build step #1: build the React front end
-FROM node:16-alpine as build-step
+FROM us-docker.pkg.dev/hasura-container-images/external-images/docker.io/library/node:16-alpine-stable as build-step
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json yarn.lock ./
@@ -11,7 +11,7 @@ RUN yarn install
 RUN yarn build
 
 # Build step #2: build the API with the client as static files
-FROM python:3.9
+FROM us-docker.pkg.dev/hasura-container-images/external-images/docker.io/library/python:3.9-stable
 WORKDIR /app
 COPY --from=build-step /app/build ./build
 

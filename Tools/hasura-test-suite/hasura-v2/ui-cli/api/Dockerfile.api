@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM us-docker.pkg.dev/hasura-container-images/external-images/docker.io/library/python:3.9-stable
 WORKDIR /app
 
 COPY ./requirements.txt ./api.py ./.flaskenv ./
